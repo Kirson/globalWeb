@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmMntLocalVenta" rendered="#{loginCtr.usuario!=null}">
+			<p:growl autoUpdate="true" id="message" />
+			<p:panel header="#{msj.mantenimientoLocalVenta}"
+				id="pnlMntLocalVenta">
+				<p:commandButton id="cmdBuscarLocalVenta" value="Buscar"
+					icon="ui-icon-search" type="button" />
+				<p:overlayPanel id="ovpBuscarLocalVenta" for="cmdBuscarLocalVenta"
+					hideEffect="fade" widgetVar="ovpBuscarLocalVenta">
+					<h:panelGrid id="pGridBuscarLocalVenta" columns="2">
+						<p:outputLabel value="#{msj.ruc}" />
+						<p:inputText value="#{mntLocalVentaCtr.rucLocal}" />
+
+						<p:outputLabel value="#{msj.nombreComercial}" />
+						<p:inputText value="#{mntLocalVentaCtr.nombreComercial}" />
+
+						<p:outputLabel value="#{msj.razonSocial}" />
+						<p:inputText value="#{mntLocalVentaCtr.lvRazonSocial}" />
+					</h:panelGrid>
+					<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+						process="pGridBuscarLocalVenta, @this"
+						action="#{mntLocalVentaCtr.recuperarLocalVentaList}"
+						update="tblLocalVenta" />
+					<br></br>
+
+					<p:dataTable id="tblLocalVenta" scrollable="true"
+						scrollHeight="400" value="#{mntLocalVentaCtr.localVentaList}"
+						var="localVenta" rowIndexVar="it">
+						<p:column headerText="Ln." width="100" style="text-align: right;">
+							<p:outputLabel value="#{it+1}" style="FONT-WEIGHT: bold;" />
+						</p:column>
+						<p:column headerText="#{msj.ruc}"  style="text-align: right;">
+							<h:outputText value="#{localVenta.lvRuc}" />
+						</p:column>
+						<p:column headerText="#{msj.razonSocial}">
+							#{localVenta.lvRazonSocial}
+						</p:column>
+						<p:column headerText="#{msj.nombreComercial}">
+							<h:outputText value="#{localVenta.lvNombreCom}" />
+						</p:column>
+						<p:column headerText="#{msj.editar}" width="60">
+							<center>
+								<p:commandButton title="#{msj.editar}" process="@this"
+									icon="ui-icon-pencil"
+									update=":frmMntLocalVenta:pnlMntLocalVenta"
+									action="#{mntLocalVentaCtr.seleccionarLocalVenta}"
+									onclick="PF('ovpBuscarLocalVenta').hide()">
+									<f:setPropertyActionListener
+										target="#{mntLocalVentaCtr.localVenta}" value="#{localVenta}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+				<br></br>
+
+				<div align="center">
+					<p:panelGrid id="pgMntLocalVenta" columns="2">
+						<p:outputLabel value="#{msj.codigo}" />
+						<p:outputLabel value="#{mntLocalVentaCtr.localVenta.lvId}" />
+
+						<p:outputLabel for="txtRazonSocial" value="#{msj.razonSocial}" />
+						<p:inputText id="txtRazonSocial" styleClass="width400px"
+							
+							value="#{mntLocalVentaCtr.localVenta.lvRazonSocial}"
+							required="true" requiredMessage="#{msj.reqRazonSocial}" />
+
+						<p:outputLabel for="txtNombreComercial"
+							value="#{msj.nombreComercial}" />
+						<p:inputText id="txtNombreComercial" styleClass="width400px"
+							
+							value="#{mntLocalVentaCtr.localVenta.lvNombreCom}"
+							required="true" requiredMessage="#{msj.reqNombreComercial}" />
+
+						<p:outputLabel for="txtRucLocal" value="#{msj.ruc}" />
+						<p:inputText id="txtRucLocal" styleClass="width400px"
+							value="#{mntLocalVentaCtr.localVenta.lvRuc}" required="true"
+							requiredMessage="#{msj.reqRuc}" />
+
+						<p:outputLabel for="txtActividadPrincipal"
+							value="#{msj.actividadPrincipal}" />
+						<p:inputText id="txtActividadPrincipal" styleClass="width400px"
+							
+							value="#{mntLocalVentaCtr.localVenta.lvActividadPri}" />
+
+						<p:outputLabel value="#{msj.pagWebLocal}" />
+						<p:inputText value="#{mntLocalVentaCtr.localVenta.lvWeb}"
+							styleClass="width400px" />
+
+						<p:outputLabel for="txtLvEmail" value="#{msj.email}" />
+						<p:inputText id="txtLvEmail" styleClass="width400px"
+							value="#{mntLocalVentaCtr.localVenta.lvEmail}" required="true"
+							requiredMessage="#{msj.reqEmail}" />
+
+						<p:outputLabel for="txtLvTelefono" value="#{msj.telefonoLocal}" />
+						<p:inputMask mask="#{msj.forTelConvencional}" id="txtLvTelefono"
+							styleClass="width400px"
+							value="#{mntLocalVentaCtr.localVenta.lvTelefono}" />
+
+						<p:outputLabel for="txtLvTelCel" value="#{msj.telefonoCelular}" />
+						<p:inputMask mask="#{msj.forTelCelular}" id="txtLvTelCel"
+							styleClass="width400px" required="true"
+							requiredMessage="#{msj.reqTelefonoCelular}"
+							value="#{mntLocalVentaCtr.localVenta.lvTelCel}" />
+
+						<p:outputLabel value="#{msj.calificacion}" />
+						<p:rating value="#{mntLocalVentaCtr.localVenta.lvRanking}" />
+
+						<p:outputLabel value="#{msj.categoria}" for="somCategoria" />
+						<h:selectOneMenu id="somCategoria" required="true"
+							styleClass="width400px" requiredMessage="#{msj.reqCategoria}"
+							value="#{mntLocalVentaCtr.catIdSeleccionada}">
+							<f:selectItem noSelectionOption="true"
+								itemLabel="#{msj.seleccione}" itemValue="0" />
+							<f:selectItems value="#{mntLocalVentaCtr.categoriaListItem}" />
+						</h:selectOneMenu>
+
+						<p:outputLabel for="txtLvSlogan" value="#{msj.slogan}" />
+						<p:inputText id="txtLvSlogan" styleClass="width400px"
+							value="#{mntLocalVentaCtr.localVenta.lvSlogan}" required="true"
+							requiredMessage="#{msj.reqSlogan}" />
+
+						<p:outputLabel for="txtLvServicio" value="#{msj.servicio}" />
+						<p:inputText id="txtLvServicio" styleClass="width400px"
+							value="#{mntLocalVentaCtr.localVenta.lvServicio}" required="true"
+							requiredMessage="#{msj.reqServicio}" />
+
+						<p:outputLabel value="#{msj.palabraClave}" />
+						<h:panelGrid>
+							<h:panelGrid columns="2">
+								<p:inputText id="txtLvPalabraClave" maxlength="15"
+									styleClass="width200px"
+									value="#{mntLocalVentaCtr.lvPalabraClave}"
+									validatorMessage="#{msj.longitudMax}">
+									<f:validateLength maximum="15" />
+								</p:inputText>
+								<p:commandLink value="#{msj.agregar}"
+									action="#{mntLocalVentaCtr.agregarPalabraClave}"
+									process="@this,txtLvPalabraClave"
+									update="txtLvPalabraClave, tblPalabraClave" />
+							</h:panelGrid>
+
+							<p:dataTable id="tblPalabraClave" styleClass="width400px"
+								requiredMessage="#{msj.reqCategoria}"
+								value="#{mntLocalVentaCtr.palabraClaveList}" var="palabraClave">
+								<p:column>
+									<h:outputText value="#{palabraClave}" />
+								</p:column>
+								<p:column>
+									<p:commandLink action="#{mntLocalVentaCtr.quitarPalabraClave}"
+										value="#{msj.quitar}" process="@this" update="tblPalabraClave">
+										<f:setPropertyActionListener
+											target="#{mntLocalVentaCtr.lvPalabraClave}"
+											value="#{palabraClave}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+
+						<p:outputLabel value="#{msj.usrCrea}" />
+						<h:outputText value="#{mntLocalVentaCtr.localVenta.lvUsrCrea}" />
+
+						<p:outputLabel value="#{msj.fechaCrea}" />
+						<h:outputText
+							value="#{mntLocalVentaCtr.dateTimeToFechaHora(mntLocalVentaCtr.localVenta.lvFechaCrea)}" />
+
+						<p:outputLabel value="#{msj.usrModifica}" />
+						<h:outputText value="#{mntLocalVentaCtr.localVenta.lvUsrModifica}" />
+
+						<p:outputLabel value="#{msj.fechaModifica}" />
+						<h:outputText
+							value="#{mntLocalVentaCtr.dateTimeToFechaHora(mntLocalVentaCtr.localVenta.lvFechaModifica)}" />
+
+
+						<p:outputLabel value="#{msj.estado}" for="sorLvEstado" />
+						<p:selectOneRadio id="sorLvEstado"
+							value="#{mntLocalVentaCtr.localVenta.lvEstado}" required="true"
+							requiredMessage="#{msj.reqEstado}">
+							<f:selectItem itemValue="OK" itemLabel="#{msj.ok}" />
+							<f:selectItem itemValue="ANU" itemLabel="#{msj.anulado}" />
+						</p:selectOneRadio>
+
+						<p:outputLabel value="#{msj.contacto}" />
+						<h:panelGrid>
+							<p:commandButton id="imageBtn" value="Cambiar" type="button" />
+							<p:overlayPanel id="imagePanel" for="imageBtn" hideEffect="fade"
+								widgetVar="dlgPersonaBuscar">
+								<h:panelGrid id="pgPersona" columns="2">
+									<p:outputLabel value="#{msj.cedRucPas}" />
+									<p:inputText value="#{mntLocalVentaCtr.perCedRuc}" />
+
+									<p:outputLabel value="#{msj.nombres}" />
+									<p:inputText value="#{mntLocalVentaCtr.nombres}" />
+
+									<p:outputLabel value="#{msj.apellidos}" />
+									<p:inputText value="#{mntLocalVentaCtr.apellidos}" />
+									<f:facet name="footer">
+										<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+											action="#{mntLocalVentaCtr.recuperarPersonaList}"
+											process="pgPersona" update="tblPersona" />
+									</f:facet>
+								</h:panelGrid>
+								<br></br>
+								<div class="scrollDivVertical">
+									<h:dataTable id="tblPersona"
+										value="#{mntLocalVentaCtr.personaList}" var="persona">
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.codigo}" />
+											</f:facet>
+											<h:outputText value="#{persona.perId}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.nombresCompletos}" />
+											</f:facet>
+											<p:commandLink
+												value="#{persona.perApellidos} #{persona.perNombres}"
+												process="@this"
+												update=":frmMntLocalVenta:tblContactos, frmMntLocalVenta:txtPerNombresApellidos"
+												onclick="PF('dlgPersonaBuscar').hide()"
+												action="#{mntLocalVentaCtr.seleccionarPersona}">
+												<f:setPropertyActionListener
+													target="#{mntLocalVentaCtr.localVenta.persona}"
+													value="#{persona}" />
+											</p:commandLink>
+										</h:column>
+										<h:column style="text-align:right;">
+											<f:facet name="header">
+												<h:outputText value="#{msj.identificacion}" />
+											</f:facet>
+											<h:outputText value="#{persona.perCedRucPas}" />
+										</h:column>
+									</h:dataTable>
+								</div>
+							</p:overlayPanel>
+							<h:outputText id="txtPerNombresApellidos"
+								value="#{mntLocalVentaCtr.localVenta.persona.perNombres} #{mntLocalVentaCtr.localVenta.persona.perApellidos}" />
+							<h:outputText value="#{msj.contactosLista}" />
+							<h:dataTable id="tblContactos"
+								value="#{mntLocalVentaCtr.contactoList}" var="contacto">
+								<h:column>
+									<h:outputText value="#{contacto.conDescripcion}" />
+								</h:column>
+							</h:dataTable>
+						</h:panelGrid>
+
+						<h:outputText value="#{msj.logo}" />
+						<p:panelGrid id="pGridLvLogo" columns="2"
+							rendered="#{mntLocalVentaCtr.pGridLvLogoRender}">
+
+							<h:outputText value="#{msj.archivo}" />
+							<h:outputText value="#{mntLocalVentaCtr.localVenta.lvLogo}" />
+
+							<h:outputText value="#{msj.imagen}" />
+							<h:graphicImage
+								value="/imagenes/#{mntLocalVentaCtr.localVenta.lvLogo}" />
+							<h:outputText value="#{msj.cambiar}" />
+							<p:fileUpload id="fu1"
+								fileUploadListener="#{mntLocalVentaCtr.handleFileUpload}"
+								allowTypes="/(\.|\/)(png|jpg|jpeg)$/" sizeLimit="500000"
+								update="pGridLvLogo" />
+						</p:panelGrid>
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton id="btnNuevoLocalVenta" value="#{msj.nuevo}"
+									icon="ui-icon-plusthick"
+									action="#{mntLocalVentaCtr.nuevoLocalVenta}" process="@this"
+									update="frmMntLocalVenta" />
+								<p:commandButton value="#{msj.crear}"
+									action="#{mntLocalVentaCtr.crearLocalVenta}"
+									process="pnlMntLocalVenta @this" update="pnlMntLocalVenta"
+									rendered="#{mntLocalVentaCtr.nuevoLocalVentaRender}" />
+								<p:commandButton value="#{msj.actualizar}"
+									action="#{mntLocalVentaCtr.actualizarLocalVenta}"
+									process="pgMntLocalVenta,pGridLvLogo, @this"
+									update="pnlMntLocalVenta"
+									rendered="#{mntLocalVentaCtr.actualizarLocalVentaRender}" />
+							</center>
+						</f:facet>
+					</p:panelGrid>
+				</div>
+				<br></br>
+				<p:panel id="pnlUbicacion" header="#{msj.ubicacionSucursales}"
+					rendered="#{mntLocalVentaCtr.ubicacionRender}">
+					<p:gmap id="gmap" widgetVar="w_gmap"
+						center="-0.17737419883573421, -78.47622692584991" type="ROADMAP"
+						zoom="16" style="width:100%;height:500px"
+						model="#{mntLocalVentaCtr.model}" fitBounds="true" >
+						<p:ajax event="pointSelect"
+							listener="#{mntLocalVentaCtr.onPointSelect}"
+							update="pGridMntUbicacion" />
+					</p:gmap>
+					<div align="center">
+						<p:panelGrid id="pGridMntUbicacion" columns="2">
+							<p:outputLabel value="#{msj.codigo}" />
+							<h:outputText value="#{mntLocalVentaCtr.ubicacion.ubiId}" />
+
+							<p:outputLabel value="#{msj.provincia}" for="cmbProvincia" />
+							<p:selectOneMenu required="true" id="cmbProvincia"
+								styleClass="width400px" requiredMessage="#{msj.reqProvincia}"
+								value="#{mntLocalVentaCtr.prvIdSeleccionado}">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="#{msj.seleccioneProvincia}" itemValue="0" />
+								<f:selectItems value="#{mntLocalVentaCtr.provinciaListItem}" />
+								<p:ajax event="change"
+									listener="#{mntLocalVentaCtr.recuperarCiudadListItem}"
+									update="cmbCiudad" process="@this" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="#{msj.ciudad}" for="cmbCiudad" />
+							<p:selectOneMenu required="true" id="cmbCiudad"
+								styleClass="width400px" requiredMessage="#{msj.reqCiudad}"
+								value="#{mntLocalVentaCtr.ciudadIdSeleccionado}">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="#{msj.seleccioneCiudad}" itemValue="0" />
+								<f:selectItems value="#{mntLocalVentaCtr.ciudadListItem}" />
+								<p:ajax event="change"
+									listener="#{mntLocalVentaCtr.recuperarBarrioListItem}"
+									update="cmbBarrio" process="@this" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="#{msj.barrio}" for="cmbBarrio" />
+							<p:selectOneMenu required="true" id="cmbBarrio"
+								styleClass="width400px" requiredMessage="#{msj.reqBarrio}"
+								value="#{mntLocalVentaCtr.barIdSeleccionado}">
+								<f:selectItem noSelectionOption="true"
+									itemLabel="#{msj.seleccioneBarrio}" itemValue="0" />
+								<f:selectItems value="#{mntLocalVentaCtr.barrioListItem}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="txtUbiSector" value="#{msj.sector}" />
+							<p:inputText id="txtUbiSector"
+								value="#{mntLocalVentaCtr.ubicacion.ubiSector}"
+								styleClass="width400px" required="true"
+								requiredMessage="#{msj.reqSector}" />
+
+							<p:outputLabel for="txtUbiCallePrincipal"
+								value="#{msj.callePrincipal}" />
+							<p:inputText id="txtUbiCallePrincipal" styleClass="width400px"
+								value="#{mntLocalVentaCtr.ubicacion.ubiCallePrin}"
+								required="true" requiredMessage="#{msj.reqCallePrincipal}" />
+
+							<p:outputLabel for="txtUbiCalleSec"
+								value="#{msj.calleSecundaria}" />
+							<p:inputText id="txtUbiCalleSec" styleClass="width400px"
+								value="#{mntLocalVentaCtr.ubicacion.ubiCalleSec}"
+								required="true" requiredMessage="#{msj.reqCalleSecundaria}" />
+
+							<p:outputLabel for="txtUbiNumPredio" value="#{msj.numero}" />
+							<p:inputText id="txtUbiNumPredio" styleClass="width400px"
+								value="#{mntLocalVentaCtr.ubicacion.ubiNumPredio}"
+								required="true" requiredMessage="#{msj.reqNumeroPredio}" />
+
+							<p:outputLabel value="#{msj.urlMapa}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiFrameMapa}"
+								styleClass="width400px" required="true"
+								requiredMessage="#{msj.reqUrlMapa}"
+								validatorMessage="#{msj.val500Caracteres}">
+								<f:validateLength maximum="500" />
+							</p:inputText>
+
+							<p:outputLabel value="#{msj.urlStreetView}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiFrameSv}"
+								styleClass="width400px" required="true"
+								requiredMessage="#{msj.reqUrlStreetView}"
+								validatorMessage="#{msj.val500Caracteres}">
+								<f:validateLength maximum="500" />
+							</p:inputText>
+
+							<p:outputLabel value="#{msj.lunVieAbre}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiLunVieAbre}"
+								styleClass="width400px" />
+							<p:outputLabel value="#{msj.lunVieCierra}" />
+							<p:inputText
+								value="#{mntLocalVentaCtr.ubicacion.ubiLunVieCierra}"
+								styleClass="width400px" />
+
+							<p:outputLabel value="#{msj.sabDomFerAbre}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiSdfAbre}"
+								styleClass="width400px" />
+
+							<p:outputLabel value="#{msj.sabDomFerCierra}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiSdfCierra}"
+								styleClass="width400px" />
+
+							<p:outputLabel value="#{msj.latitud}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiLatitud}"
+								styleClass="width400px" />
+
+							<p:outputLabel value="#{msj.longitud}" />
+							<p:inputText value="#{mntLocalVentaCtr.ubicacion.ubiLongitud}"
+								styleClass="width400px" />
+
+							<p:outputLabel for="sorUbiEstado" value="#{msj.estado}" />
+							<p:selectOneRadio id="sorUbiEstado"
+								value="#{mntLocalVentaCtr.ubicacion.ubiEstado}" required="true"
+								requiredMessage="#{msj.reqEstado}">
+								<f:selectItem itemValue="OK" itemLabel="#{msj.ok}" />
+								<f:selectItem itemValue="ANU" itemLabel="#{msj.anulado}" />
+							</p:selectOneRadio>
+						</p:panelGrid>
+
+
+
+						<p:commandButton value="#{msj.nuevo}" icon="ui-icon-plusthick"
+							action="#{mntLocalVentaCtr.nuevaUbicacion}" process="@this"
+							update="pnlUbicacion" />
+						<p:commandButton value="#{msj.crear}"
+							process="pGridMntUbicacion @this" update="pnlUbicacion"
+							action="#{mntLocalVentaCtr.crearUbicacion}"
+							rendered="#{mntLocalVentaCtr.crearUbicacionRender}" />
+						<p:commandButton value="#{msj.actualizar}"
+							action="#{mntLocalVentaCtr.actualizarUbicacion}"
+							process="pnlUbicacion" update="pnlUbicacion tblUbicacion"
+							rendered="#{mntLocalVentaCtr.actualizarUbicacionRender}" />
+					</div>
+					<br></br>
+					<p:dataTable id="tblUbicacion"
+						value="#{mntLocalVentaCtr.ubicacionList}" var="ubicacion">
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{ubicacion.ubiId}" />
+						</p:column>
+						<p:column headerText="#{msj.ciudad}">
+							<h:outputText value="#{ubicacion.barrio.ciudad.ciuNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.barrio}">
+							<h:outputText value="#{ubicacion.barrio.barNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.estado}">
+							<h:outputText value="#{ubicacion.ubiEstado}" />
+						</p:column>
+
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton title="#{msj.editar}" icon="ui-icon-pencil"
+									action="#{mntLocalVentaCtr.seleccionarUbicacion}"
+									process="@this" update=":frmMntLocalVenta:pnlUbicacion">
+									<f:setPropertyActionListener
+										target="#{mntLocalVentaCtr.ubicacion}" value="#{ubicacion}" />
+								</p:commandButton>
+								<p:commandButton title="#{msj.eliminar}" icon="ui-icon-close"
+									action="#{mntLocalVentaCtr.eliminarUbicacion}" process="@this"
+									update=":frmMntLocalVenta:pnlUbicacion">
+									<f:setPropertyActionListener
+										target="#{mntLocalVentaCtr.ubicacion}" value="#{ubicacion}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				<br></br>
+				<p:panel id="pnlMntLocalPromocion"
+					header="#{msj.imagenesPromociones}"
+					rendered="#{mntLocalVentaCtr.imagenesRender}">
+					<p:panelGrid id="pGridMntLocalPromocion" columns="2">
+						<h:outputText value="#{msj.codigo}" />
+						<h:outputText value="#{mntLocalVentaCtr.localPromocion.lpId}" />
+
+						<h:outputText value="#{msj.cargarpng}" />
+						<p:fileUpload id="fu2"
+							fileUploadListener="#{mntLocalVentaCtr.handleFileUploadPRBR}"
+							allowTypes="/(\.|\/)(png|jpg|jpeg)$/" sizeLimit="500000"
+							update="pGridMntLocalPromocion" process="@this" />
+
+						<h:outputLabel value="#{msj.imagen}" />
+						<h:graphicImage
+							value="/imagenes/#{mntLocalVentaCtr.localPromocion.lpImagen}" />
+
+						<h:outputText value="#{msj.archivo}" />
+						<h:outputText value="#{mntLocalVentaCtr.localPromocion.lpImagen}" />
+						<p:outputLabel for="sorLpTipo" value="#{msj.tipo}" />
+
+						<p:selectOneRadio id="sorLpTipo" required="true"
+							requiredMessage="#{msj.reqTipoImagen}"
+							value="#{mntLocalVentaCtr.localPromocion.lpTipo}">
+							<f:selectItem itemValue="PR" itemLabel="#{msj.promociones}" />
+							<f:selectItem itemValue="BR" itemLabel="#{msj.barra}" />
+						</p:selectOneRadio>
+
+						<p:outputLabel for="sorLpEstado" value="#{msj.estado}" />
+						<p:selectOneRadio id="sorLpEstado"
+							value="#{mntLocalVentaCtr.localPromocion.lpEstado}"
+							required="true" requiredMessage="#{msj.reqEstado}">
+							<f:selectItem itemValue="OK" itemLabel="#{msj.ok}" />
+							<f:selectItem itemValue="ANU" itemLabel="#{msj.anulado}" />
+						</p:selectOneRadio>
+						<f:facet name="footer">
+							<h:panelGrid id="pGridBotonesMntLocalPromocion" columns="3">
+								<p:commandButton value="#{msj.nuevo}" process="@this"
+									icon="ui-icon-plusthick" update="pnlMntLocalPromocion"
+									action="#{mntLocalVentaCtr.nuevoLocalPromocion}" />
+								<p:commandButton value="#{msj.crear}"
+									action="#{mntLocalVentaCtr.crearLocalPromocion}"
+									rendered="#{mntLocalVentaCtr.crearLocalPromocionRender}"
+									process="@this, pGridMntLocalPromocion"
+									update="pGridMntLocalPromocion, tblLocalPromocion" />
+								<p:commandButton value="#{msj.actualizar}"
+									rendered="#{mntLocalVentaCtr.actualizarLocalPromocionRender}"
+									process="@this,pGridMntLocalPromocion"
+									update="pGridMntLocalPromocion, tblLocalPromocion"
+									action="#{mntLocalVentaCtr.actualizarLocalPromocion}" />
+							</h:panelGrid>
+						</f:facet>
+					</p:panelGrid>
+
+					<br></br>
+					<p:dataTable id="tblLocalPromocion" scrollable="true"
+						scrollHeight="300" value="#{mntLocalVentaCtr.localPromocionList}"
+						var="localPromocion">
+						<p:column headerText="#{msj.imagen}" width="100">
+							<h:graphicImage value="/imagenes/#{localPromocion.lpImagen}"
+								width="75" height="75" />
+						</p:column>
+						<p:column headerText="#{msj.archivo}">
+							<h:outputText value="#{localPromocion.lpImagen}" />
+						</p:column>
+						<p:column headerText="#{msj.tipo}">
+							<h:outputText value="#{localPromocion.lpTipo}" />
+						</p:column>
+						<p:column headerText="#{msj.estado}">
+							<h:outputText value="#{localPromocion.lpEstado}" />
+						</p:column>
+						<p:column headerText="#{msj.opciones}">
+							<center>
+								<p:commandButton id="cmdSeleccionarLocalPromocion"
+									icon="ui-icon-pencil" title="#{msj.editar}" process="@this"
+									action="#{mntLocalVentaCtr.seleccionarLocalPromocion}"
+									update=":frmMntLocalVenta:pnlMntLocalPromocion">
+									<f:setPropertyActionListener
+										target="#{mntLocalVentaCtr.localPromocion}"
+										value="#{localPromocion}" />
+								</p:commandButton>
+								<p:commandButton id="cmdEliminarLocalPromocion"
+									title="#{msj.eliminar}" process="@this" icon="ui-icon-close"
+									onclick="PF('dlgEliminarLocalPromocion').show()">
+									<f:setPropertyActionListener
+										target="#{mntLocalVentaCtr.localPromocion}"
+										value="#{localPromocion}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:panel>
+
+			<p:confirmDialog message="#{msj.estaSeguro}"
+				header="#{msj.eliminarRegistro}" severity="alert"
+				widgetVar="dlgEliminarLocalPromocion">
+				<p:commandButton value="Si" process="@this"
+					actionListener="#{mntLocalVentaCtr.eliminarLocalPromocion}"
+					oncomplete="PF('dlgEliminarLocalPromocion').hide()"
+					update="tblLocalPromocion" />
+				<p:commandButton value="No"
+					onclick="PF('dlgEliminarLocalPromocion').hide();" type="button" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

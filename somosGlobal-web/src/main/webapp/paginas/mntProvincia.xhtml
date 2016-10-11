@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		
+			<h:form id="frmMntProvincia" rendered="#{loginCtr.usuario!=null}">
+				<p:panel id="pnlMntProvincia" header="#{msj.mantenimientoProvincia}">
+					<div align="left">
+						<p:commandButton id="btnNuevaProvincia" value="#{msj.nuevo}"
+							icon="ui-icon-plusthick" process="@this"
+							action="#{mntProvinciaCtr.nuevaProvincia}"
+							update="pgMntProvincia" onclick="PF('dlgMntProvincia').show()" />
+					</div>
+					<p:dataTable id="tblProvincia"
+						value="#{mntProvinciaCtr.provinciaList}" var="provincia">
+						<f:facet name="header">
+							<h:outputText value="#{msj.registrosEncontrados} #{mntProvinciaCtr.provinciaList.size()}" />
+						</f:facet>
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{provincia.prvId}" />
+						</p:column>
+						<p:column headerText="#{msj.provincia}">
+							<h:outputText value="#{provincia.prvNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton id="btnSeleccionarProvincia"
+									action="#{mntProvinciaCtr.seleccionarProvincia}"
+									process="@this" title="#{msj.editar}" icon="ui-icon-pencil"
+									update=":frmMntProvincia:pgMntProvincia"
+									oncomplete="PF('dlgMntProvincia').show()">
+									<f:setPropertyActionListener
+										target="#{mntProvinciaCtr.provincia}" value="#{provincia}" />
+								</p:commandButton>
+								<p:commandButton id="btmAgregarCiudad"
+									action="#{mntProvinciaCtr.recuperarCiudadList}"
+									icon="ui-icon-plusthick" title="#{msj.agregarCiudad}"
+									process="@this"
+									update=":frmMntProvincia:tblCiudad :frmMntProvincia:lblNombreProvincia"
+									oncomplete="PF('dlgVerCiudad').show()">
+									<f:setPropertyActionListener
+										target="#{mntProvinciaCtr.provincia}" value="#{provincia}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+				<p:dialog id="dlgMntProvincia" modal="true"
+					widgetVar="dlgMntProvincia" header="#{msj.mantenimientoProvincia}">
+					<p:panelGrid id="pgMntProvincia" columns="2">
+						<p:outputLabel value="#{msj.codigo}" />
+						<p:outputLabel value="#{mntProvinciaCtr.provincia.prvId}" />
+
+						<p:outputLabel for="txtNombreProvincia" value="#{msj.provincia}" />
+						<h:panelGroup>
+							<p:inputText id="txtNombreProvincia"
+								value="#{mntProvinciaCtr.provincia.prvNombre}"
+								required="true" requiredMessage="#{msj.reqProvincia}" />
+							<p:message for="txtNombreProvincia" />
+						</h:panelGroup>
+						<f:facet name="footer">
+							<center>
+								<p:commandButton id="btnCrearProvincia" value="#{msj.crear}"
+									action="#{mntProvinciaCtr.crearProvincia}"
+									process="pgMntProvincia" update="tblProvincia pgMntProvincia"
+									rendered="#{mntProvinciaCtr.crearNuevo}" />
+								<p:commandButton id="btnActualizarProvincia"
+									value="#{msj.actualizar}"
+									action="#{mntProvinciaCtr.actualizarProvincia}"
+									process="pgMntProvincia"
+									update="tblProvincia pgMntProvincia lblNombreProvincia"
+									rendered="#{mntProvinciaCtr.actualizar}" />
+							</center>
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+
+				<p:dialog widgetVar="dlgVerCiudad" modal="true" width="50%"
+					header="#{msj.mantenimientoCiudad}">
+
+					<div align="left">
+						<h:panelGrid columns="2">
+							<p:outputLabel value="#{msj.provincia}" />
+							<p:outputLabel id="lblNombreProvincia"
+								value="#{mntProvinciaCtr.provincia.prvNombre}" />
+
+						</h:panelGrid>
+						<br />
+						<p:commandButton id="btnNuevaCiudad" value="#{msj.nuevo}"
+							icon="ui-icon-plusthick" process="@this"
+							oncomplete="PF('dlgMntCiudad').show()" update="pgMntCiudad"
+							action="#{mntProvinciaCtr.nuevaCiudad}" />
+					</div>
+
+					<p:dataTable id="tblCiudad" value="#{mntProvinciaCtr.ciudadList}"
+						var="ciudad">
+						<f:facet name="header">
+							<h:outputText
+								value="#{msj.registrosEncontrados} #{mntProvinciaCtr.ciudadList.size()}" />
+						</f:facet>
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{ciudad.ciuId}" />
+						</p:column>
+						<p:column headerText="#{msj.ciudad}">
+							<h:outputText value="#{ciudad.ciuNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton process="@this" icon="ui-icon-pencil"
+									oncomplete="PF('dlgMntCiudad').show()"
+									update=":frmMntProvincia:pgMntCiudad"
+									action="#{mntProvinciaCtr.seleccionarCiudad}">
+									<f:setPropertyActionListener target="#{mntProvinciaCtr.ciudad}"
+										value="#{ciudad}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+
+				</p:dialog>
+
+				<p:dialog widgetVar="dlgMntCiudad" modal="true"
+					header="#{msj.mantenimientoCiudad}">
+					<p:panelGrid id="pgMntCiudad" columns="2">
+						<p:outputLabel value="#{msj.provincia}" />
+						<p:outputLabel
+							value="#{mntProvinciaCtr.provincia.prvNombre}" />
+						<p:outputLabel value="#{msj.codigo}" for="txtCodigoCiudad" />
+						<p:outputLabel id="txtCodigoCiudad"
+							value="#{mntProvinciaCtr.ciudad.ciuId}" />
+
+						<p:outputLabel value="#{msj.ciudad}" for="txtNombreCiudad" />
+						<p:inputText id="txtNombreCiudad"
+							value="#{mntProvinciaCtr.ciudad.ciuNombre}" required="true"
+							requiredMessage="#{msj.reqCiudad}" />
+						<p:message for="txtNombreCiudad" />
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton id="btnCrearCiudad"
+									action="#{mntProvinciaCtr.crearCiudad}" process="pgMntCiudad"
+									rendered="#{mntProvinciaCtr.crearNuevaCiudad}"
+									value="#{msj.crear}" update="pgMntCiudad, tblCiudad" />
+
+								<p:commandButton id="btnActualizarCiudad"
+									value="#{msj.actualizar}"
+									rendered="#{mntProvinciaCtr.actualizarCiudadRender}"
+									action="#{mntProvinciaCtr.actualizarCiudad}"
+									process="pgMntCiudad" update="pgMntCiudad tblCiudad" />
+							</center>
+						</f:facet>
+					</p:panelGrid>
+				</p:dialog>
+				<p:growl autoUpdate="true" />
+			</h:form>
+	
+	</ui:define>
+</ui:composition>
+</html>

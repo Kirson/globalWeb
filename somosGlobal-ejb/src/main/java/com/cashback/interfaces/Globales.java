@@ -1,0 +1,40 @@
+package com.cashback.interfaces;
+
+public interface Globales {
+	int EST_ANULADO = 0;
+	int EST_ACTIVO = 1;
+	String EST_OK = "OK";
+	String EST_ANU = "ANU";
+	String PAR_PATH_IMAGENES = "PATH_LOGOS_LOCAL";
+	String SERVIDOR_NOMBRE = "SERVIDOR_NOMBRE";
+	String PAR_CLAVE_DEFAULT = "cashback";
+	String IMG_TIPO_PROMO = "PR";
+	String IMG_TIPO_BARRA = "BR";
+	String TC_TIPO_LOCAL = "TCL";
+	String TC_TIPO_UBICACION = "TCU";
+	String NIVEL_CONSUMIDOR = "CS";
+	String NIVEL_GLOBAL_AMIGO = "GA";
+	String NIVEL_HOLDING = "HL";
+	String NIVEL_SUPERVISOR_HOLDING = "SH";
+	String NIVEL_GLOBAL = "GL";
+	String NIVEL_GRUPO_EMPRESARIAL = "GE";
+	String ROL_NEGOCIO = "RN";
+	String TELEFONO_MOVIL = "TM";
+	String TELEFONO_CONVENCIONAL = "TC";
+	String DIRECCION_DOMICILIO = "DD";
+	String DIRECCION_OFICINA = "DO";
+	String CONTACTO_TIPO_CATALOGO = "CT";
+	String TELEFONO = "TT";
+	String CORREO_ELECTRONICO = "CC";
+	String DIRECCION = "TD";
+	String CODIGO_PERFIL_CONSUMIDOR = "PC";
+	String CODIGO_PERFIL_ACTOR = "AC";
+	String DIAS_TIPO_CATALOGO = "DS";
+
+	String IMAGEN_TIPO_CATALOGO = "IM";
+	String IMAGEN_PROMOCION = "IP";
+	String IMAGEN_GALERIA = "IG";
+	String IMG_TIPO_FOTO_ESTABLECIMIENTO = "FE";
+	String IMG_TIPO_LOGO_ESTABLECIMIENTO = "LG";
+
+}

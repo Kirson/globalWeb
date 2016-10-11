@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="filtro">
+		<h:form>
+			<p:growl autoUpdate="true" showDetail="true" />
+			<h:panelGroup id="pGridBusquedaAvanzada">
+				<div class="row">
+					<div class="col-sm-4">
+						<p:commandLink value="Quitar Filtros" process="@this" styleClass="btn btn-default"
+							action="#{actorCat02Ctrl.recuperarTodo}" update="@all" />
+					</div>
+					<div class="col-sm-4">
+						<p:autoComplete id="acSimple2"
+							value="#{actorCat02Ctrl.palabraClaveAct}"
+							completeMethod="#{conLocalVentaAvanzada.completeLvPalabrasClave}">
+						</p:autoComplete>
+						<p:watermark for="acSimple2" value="#{msj.palabraClave}"
+							id="watermark2" />
+						<p:commandLink value="#{msj.buscar}" styleClass="btn btn-default"
+							process="pGridBusquedaAvanzada @this"
+							action="#{actorCat02Ctrl.recuperarLocalVentaList3}"
+							update=":frmconLocalVentaCategoria01:pGroupLocalVentaList" />
+					</div>
+					<div class="col-sm-4">
+						<h:selectOneMenu styleClass="form-control"
+							value="#{actorCat02Ctrl.catIdSeleccionada}">
+							<f:selectItem itemLabel="Todas las Categorias" itemValue="01"
+								noSelectionOption="true" />
+							<f:selectItems value="#{actorCat02Ctrl.categoriaListItem}" />
+							<f:ajax event="change" 
+								listener="#{actorCat02Ctrl.recuperarActorList}" execute="@this"
+								render="@all" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+
+	<ui:define name="categoria">
+		<h:graphicImage
+			value="/imagenes/#{actorCat02Ctrl.categoria.catImagen}" />
+	</ui:define>
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaCategoria01">
+			<h:panelGroup id="pGroupLocalVentaList">
+				<ui:repeat var="grupoEmpresarialActor"
+					value="#{actorCat02Ctrl.actorList}">
+					<br />
+					<div class="row">
+						<div class="col-sm-4">
+							<h:graphicImage 
+								styleClass="img-responsive"
+								value="/imagenes/#{grupoEmpresarialActor.fotoAct}" />
+						</div>
+						<div class="col-sm-6">
+							<h2>
+								<h:outputText value="#{grupoEmpresarialActor.razonSocialAct}" />
+							</h2>
+							<div style="width: 90%; height: 150px; overflow-y: scroll;">
+
+								<div class="table-responsive">
+									<h:dataTable value="#{grupoEmpresarialActor.actoresHijos}"
+										styleClass="table table-striped" var="localActor">
+										<h:column>
+											<h:dataTable value="#{localActor.direccionesActor}"
+												var="direccion" styleClass="table table-striped">
+												<h:column>
+													<p:commandLink process="@this"
+														action="#{actorLocalCtrl.verActorLocal}">
+														<h:graphicImage value="/imagenes/bt_I.png" />
+														<f:setPropertyActionListener
+															target="#{actorLocalCtrl.localActor}"
+															value="#{localActor}" />
+													</p:commandLink>
+													<p:commandLink process="@this"
+														action="#{actorLocalCtrl.verPromocionLocal}">
+														<h:graphicImage value="/imagenes/bt_p.png" />
+														<f:setPropertyActionListener
+															target="#{actorLocalCtrl.localActor}"
+															value="#{localActor}" />
+													</p:commandLink>
+												</h:column>
+												<h:column>
+													<f:facet name="header">#{msj.sector}</f:facet>
+													#{direccion.localidad.locNombre}
+												</h:column>
+												<h:column>
+													<f:facet name="header">#{msj.direccion}</f:facet>
+													<p class="text-capitalize list-group-item-text">#{direccion.val2Ar}
+														#{direccion.val4ar} y #{direccion.val3Ar}</p>
+												</h:column>
+												<h:column>
+													<f:facet name="header">Hoy</f:facet>
+													<a href="#{msj.urlHome}"> <h:graphicImage
+															value="/imagenes/icon-abierto.png" /></a>
+												</h:column>
+												<h:column>
+													<p:commandLink process="@this"
+														action="#{actorLocalCtrl.verGaleriaLocal}">
+														<h:graphicImage value="/imagenes/bt_v.png" />
+														<f:setPropertyActionListener
+															target="#{actorLocalCtrl.localActor}"
+															value="#{localActor}" />
+													</p:commandLink>
+												</h:column>
+											</h:dataTable>
+										</h:column>
+									</h:dataTable>
+								</div>
+							</div>
+
+							<br></br>
+							<h:panelGroup rendered="false">
+								<div class="row" align="center">
+									<div class="col-sm-4">
+										<p:commandLink process="@this"
+											action="#{actorLocalCtrl.verActorLocal}">
+											<h:graphicImage value="/imagenes/bt_infoygeo.png"
+												styleClass="img-responsive" />
+											<f:setPropertyActionListener
+												target="#{actorLocalCtrl.localActor}"
+												value="#{grupoEmpresarialActor}" />
+										</p:commandLink>
+									</div>
+									<div class="col-sm-4">
+										<p:commandLink process="@this" styleClass="pull-leght"
+											action="#{actorLocalCtrl.verGaleriaLocal}">
+											<h:graphicImage value="/imagenes/bt_vermas.png"
+												styleClass="img-responsive" />
+											<f:setPropertyActionListener
+												target="#{actorLocalCtrl.localActor}"
+												value="#{grupoEmpresarialActor}" />
+										</p:commandLink>
+									</div>
+									<div class="col-sm-4">
+										<p:commandLink process="@this"
+											action="#{actorLocalCtrl.verPromocionLocal}">
+											<h:graphicImage value="/imagenes/bt_promocion.png"
+												styleClass="img-responsive" />
+											<f:setPropertyActionListener
+												target="#{actorLocalCtrl.localActor}"
+												value="#{grupoEmpresarialActor}" />
+										</p:commandLink>
+									</div>
+								</div>
+							</h:panelGroup>
+						</div>
+
+						<div class="col-sm-2" align="right">
+							<h:graphicImage width="200px" height="200px"
+								styleClass="img-rounded"
+								value="/imagenes/#{grupoEmpresarialActor.logoAct}" />
+						</div>
+					</div>
+					<br />
+					<div style="background-color: orange; height: 5px;">
+						<br />
+					</div>
+				</ui:repeat>
+			</h:panelGroup>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
+

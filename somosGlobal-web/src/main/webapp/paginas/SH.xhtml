@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmActor" rendered="#{loginCtr.usuario != null}">
+			<p:growl autoUpdate="true" showDetail="true" />
+			<p:growl />
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{msj.crearLocal}</div>
+				<br></br>
+				<div class="panel-body">
+					<h:panelGroup id="pGridActor">
+						#{msj.ruc}
+						<h:inputText id="cedRucPasActTxt" styleClass="form-control"
+							value="#{actorCtr.actor.cedrucpasAct}" required="true"
+							requiredMessage="#{msj.reqCedRucPas}" />
+						<br></br>
+					
+						#{msj.razonSocial}
+						<h:inputText styleClass="form-control"
+							value="#{actorCtr.actor.razonSocialAct}" required="true"
+							requiredMessage="#{msj.reqRazonSocial}" />
+						<br></br>
+					
+						#{msj.actividadPrincipal}
+						<h:inputText styleClass="form-control"
+							value="#{actorCtr.actor.actividadAct}" required="true"
+							requiredMessage="#{msj.reqActividadPrincipal}" />
+						<br></br>
+						
+						#{msj.slogan}
+						<h:inputText styleClass="form-control"
+							value="#{actorCtr.actor.sloganAct}" required="true"
+							requiredMessage="#{msj.reqSlogan}" />
+						<br></br>
+						
+						#{msj.servicio}
+						<h:inputText styleClass="form-control"
+							value="#{actorCtr.actor.servicioAct}" required="true"
+							requiredMessage="#{msj.reqServicio}" />
+						<br></br>
+
+						#{msj.calificacion}
+						<p:rating value="#{actorCtr.actor.rankingAct}" />
+						<br></br>
+						<br></br>
+						
+						#{msj.imagenFotoLocal}
+						<h:graphicImage id="logoAct" styleClass="img-rounded" width="140"
+							height="140" value="/imagenes/#{actorCtr.actor.logoAct}" />
+						<br></br>
+						<br></br>
+						
+						#{msj.cambiar}
+						<p:fileUpload id="fu1"
+							fileUploadListener="#{actorCtr.handleFileUpload}"
+							allowTypes="/(\.|\/)(png|jpg|jpeg)$/" sizeLimit="500000"
+							update="logoAct" />
+						<br></br>
+					
+						#{msj.seleccionePorcentajeNivel}
+						<h:selectOneMenu value="#{actorCtr.idArolSeleccionado}"
+							required="true" requiredMessage="#{msj.reqPorcentajeNivel}"
+							styleClass="form-control">
+							<f:selectItem noSelectionOption="true" itemDisabled="true"
+								itemLabel="#{msj.seleccione}" />
+							<f:selectItems value="#{actorCtr.actorRolListItem}" />
+						</h:selectOneMenu>
+					</h:panelGroup>
+					<br></br>
+
+					<div class="panel-footer">
+						<div align="right">
+							<p:commandButton value="#{msj.crear}" process="@this,pGridActor"
+								action="#{actorCtr.crearActor}" update="pGridActor" />
+							<p:commandButton value="#{msj.nuevo}" process="@this"
+								update="pGridActor" action="#{actorCtr.inicio}" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

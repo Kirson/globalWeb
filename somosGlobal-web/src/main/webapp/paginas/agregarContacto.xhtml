@@ -1,0 +1,706 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmContacto">
+			<p:growl autoUpdate="true" showDetail="true" />
+			<div class="form-group">
+				<h4>
+					<span> <h:outputText styleClass="form-control"
+							value="#{actorCtr.actor.razonSocialAct} #{actorCtr.actor.nombresAct} #{actorCtr.actor.apellidosAct}" />
+
+					</span>
+				</h4>
+			</div>
+			<!-- Telefonos -->
+			<h:panelGroup id="pnlContacto">
+				<div class="panel panel-primary">
+
+					<div class="panel-heading">#{msj.agregarContacto}</div>
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.seleccioneTipoContacto}" />
+								<h:selectOneMenu value="#{actorCtr.telefonoIdCgSeleccionado}"
+									required="true" requiredMessage="#{msj.reqTipoContacto}"
+									styleClass="form-control">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="#{msj.seleccione}" />
+									<f:selectItems value="#{actorCtr.telefonosCatalogoGenListItem}" />
+									<p:ajax event="change"
+										listener="#{actorCtr.recuperarFormatoCatalogo}"
+										update="val1Ar" process="@this" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.numero}" />
+								<p:inputMask id="val1Ar" mask="#{actorCtr.catalogoGen2.refCg}"
+									required="true" requiredMessage="#{msj.reqValorContacto}"
+									styleClass="form-control" value="#{actorCtr.telefono.val1Ar}" />
+							</div>
+							<br></br>
+							<div class="col-md-12">
+								<div class="table-responsive">
+									<h:dataTable id="telefonosTbl" styleClass="table table-striped"
+										value="#{actorCtr.telefonosActor}" var="telefono">
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.numero}" />
+											</f:facet>
+											<h:outputText value="#{telefono.val1Ar}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.tipo}" />
+											</f:facet>
+											<h:outputText value="#{telefono.catalogoGen.nombreCg}" />
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.seleccionar}" />
+											</f:facet>
+											<p:commandLink process="@this" value="#{msj.seleccionar}"
+												update=":frmContacto:pnlContacto"
+												action="#{actorCtr.seleccionarTelefono}">
+												<f:setPropertyActionListener target="#{actorCtr.telefono}"
+													value="#{telefono}" />
+											</p:commandLink>
+										</h:column>
+										<h:column>
+											<f:facet name="header">
+												<h:outputText value="#{msj.eliminar}" />
+											</f:facet>
+											<p:commandLink value="#{msj.eliminar}" process="@this"
+												update=":frmContacto:pnlContacto"
+												action="#{actorCtr.eliminarTelefono}">
+												<f:setPropertyActionListener target="#{actorCtr.telefono}"
+													value="#{telefono}" />
+											</p:commandLink>
+										</h:column>
+									</h:dataTable>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.nuevo}" process="@this"
+							styleClass="btn btn-default" update="pnlContacto"
+							action="#{actorCtr.nuevoTelefono}" />
+						&nbsp;
+						<p:commandLink value="#{msj.crear}" styleClass="btn btn-primary"
+							rendered="#{actorCtr.crearTelefonoRender}"
+							action="#{actorCtr.crearTelefono}" process="@this, pnlContacto"
+							update="pnlContacto" />
+
+						<p:commandLink value="#{msj.actualizar}"
+							rendered="#{actorCtr.actTelefonoRender}"
+							action="#{actorCtr.actualizarTelefono}"
+							process="@this, pnlContacto" update="pnlContacto" />
+					</div>
+				</div>
+			</h:panelGroup>
+			<br></br>
+
+			<!--Correos -->
+			<h:panelGroup id="pnlCorreo">
+				<div class="panel panel-primary">
+
+					<div class="panel-heading">#{msj.agregarCorreo}</div>
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.seleccioneTipoContacto}" />
+								<h:selectOneMenu value="#{actorCtr.correoIdCgSeleccionado}"
+									required="true" requiredMessage="#{msj.reqTipoCorreo}"
+									styleClass="form-control">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="#{msj.seleccione}" />
+									<f:selectItems value="#{actorCtr.correosCatalogoGenListItem}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.correo}" />
+								<p:inputText required="true" requiredMessage="#{msj.reqEmail}"
+									styleClass="form-control" value="#{actorCtr.correo.val1Ar}" />
+							</div>
+						</div>
+
+						<br></br>
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<h:dataTable id="correosTbl" styleClass="table table-striped"
+									value="#{actorCtr.correosActor}" var="correo">
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.correo}" />
+										</f:facet>
+										<h:outputText value="#{correo.val1Ar}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.tipo}" />
+										</f:facet>
+										<h:outputText value="#{correo.catalogoGen.nombreCg}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.seleccionar}" />
+										</f:facet>
+										<p:commandLink process="@this" value="#{msj.seleccionar}"
+											update=":frmContacto:pnlCorreo"
+											action="#{actorCtr.seleccionarCorreo}">
+											<f:setPropertyActionListener target="#{actorCtr.correo}"
+												value="#{correo}" />
+										</p:commandLink>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.eliminar}" />
+										</f:facet>
+										<p:commandLink value="#{msj.eliminar}" process="@this"
+											update=":frmContacto:pnlCorreo"
+											action="#{actorCtr.eliminarCorreo}">
+											<f:setPropertyActionListener target="#{actorCtr.correo}"
+												value="#{correo}" />
+										</p:commandLink>
+
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+						<br></br>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.nuevo}" process="@this"
+							styleClass="btn btn-default" update="pnlCorreo"
+							action="#{actorCtr.nuevoCorreo}" />
+						&nbsp;
+						<p:commandLink value="#{msj.crear}" styleClass="btn btn-primary"
+							rendered="#{actorCtr.crearCorreoRender}"
+							action="#{actorCtr.crearCorreo}" process="@this, pnlCorreo"
+							update="pnlCorreo" />
+						<p:commandLink value="#{msj.actualizar}"
+							rendered="#{actorCtr.actCorreoRender}"
+							action="#{actorCtr.actualizarCorreo}" process="@this, pnlCorreo"
+							update="pnlCorreo" />
+					</div>
+
+				</div>
+			</h:panelGroup>
+			<br></br>
+
+			<!-- Direcciones -->
+			<h:panelGroup id="pGroupDireccion">
+				<div class="panel panel-primary">
+
+					<div class="panel-heading">#{msj.agregarDireccion}</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-12">
+								<p:outputLabel for="direccionIdCg"
+									value="#{msj.seleccioneTipoDireccion}" />
+								<h:selectOneMenu id="direccionIdCg"
+									value="#{actorCtr.direccionIdCgSeleccionado}" required="true"
+									requiredMessage="#{msj.reqDireccionTipo}"
+									styleClass="form-control">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione Tipo de dirección" itemValue="0" />
+									<f:selectItems
+										value="#{actorCtr.direccionesCatalogoGenListItem}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-sm-3">
+								<p:outputLabel for="provinciaLocId" value="#{msj.provincia}" />
+								<h:selectOneMenu id="provinciaLocId" styleClass="form-control"
+									value="#{actorCtr.locIdProvinciaSeleccionado}">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="Seleccione Provincia" itemValue="0" />
+									<f:selectItems value="#{actorCtr.localidadProvinciaListItem}" />
+									<p:ajax event="change"
+										listener="#{actorCtr.recuperarlocalidadCiudadList}"
+										update="cmbCiudad, pGroupDireccion" process="@this" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-3">
+								<p:outputLabel for="cmbCiudad" value="#{msj.ciudad}" />
+								<h:selectOneMenu id="cmbCiudad" styleClass="form-control"
+									value="#{actorCtr.locIdCiudadSeleccionado}">
+									<f:selectItem noSelectionOption="true" itemValue="0"
+										itemLabel="Seleccione Ciudad" />
+									<f:selectItems value="#{actorCtr.localidadCiudadListItem}" />
+									<p:ajax event="change"
+										listener="#{actorCtr.recuperarlocalidadBarrioList}"
+										update="cmbSector" process="@this" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-3">
+								<p:outputLabel for="cmbSector" value="#{msj.barrio}" />
+								<h:selectOneMenu id="cmbSector" styleClass="form-control"
+									required="true" requiredMessage="#{msj.reqSector}"
+									value="#{actorCtr.locIdBarrioSeleccionado}">
+									<f:selectItem noSelectionOption="true" itemValue="0"
+										itemLabel="Seleccione Barrio" />
+									<f:selectItems value="#{actorCtr.localidadBarrioListItem}" />
+								</h:selectOneMenu>
+							</div>
+
+							<div class="col-sm-3">
+								<p:outputLabel for="sectorArTxt" value="#{msj.sector}" />
+								<p:inputText id="sectorArTxt"
+									value="#{actorCtr.actorReferencia.sector_ar}"
+									styleClass="form-control" style="width: 100%;" required="true"
+									requiredMessage="#{msj.reqSector}" maxlength="100" />
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-sm-4">
+								<p:outputLabel for="callePrincipal"
+									value="#{msj.callePrincipal}" />
+								<p:inputText id="callePrincipal"
+									value="#{actorCtr.actorReferencia.val2Ar}" required="true"
+									requiredMessage="#{msj.reqCallePrincipal}" style="width: 100%;" />
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel for="calleSecundaria"
+									value="#{msj.calleSecundaria}" />
+								<p:inputText id="calleSecundaria"
+									value="#{actorCtr.actorReferencia.val3Ar}" required="true"
+									requiredMessage="#{msj.reqCalleSecundaria}"
+									style="width: 100%;" />
+							</div>
+							<div class="col-sm-4">
+								<p:outputLabel for="numeroPredio" value="#{msj.numeroPredio}" />
+								<p:inputText id="numeroPredio"
+									value="#{actorCtr.actorReferencia.val4ar}" required="true"
+									requiredMessage="#{msj.reqNumeroPredio}" style="width: 100%;" />
+								<br></br>
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-sm-6">
+								<p:outputLabel for="urlSView" value="#{msj.urlStreetView}" />
+								<p:inputText id="urlSView"
+									value="#{actorCtr.actorReferencia.urlSviewAr}"
+									style="width: 100%;" required="true"
+									requiredMessage="#{msj.reqUrlStreetView}" />
+							</div>
+							<div class="col-sm-6">
+								<p:outputLabel for="urlGMap" value="#{msj.urlMapa}" />
+								<p:inputText id="urlGMap"
+									value="#{actorCtr.actorReferencia.urlGmapAr}"
+									style="width: 100%;" required="true"
+									requiredMessage="#{msj.reqUrlMapa}" />
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-sm-12">
+								<h:outputLabel value="#{msj.seleccioneUbicacionMapa}" />
+								<p:gmap id="gmap" widgetVar="w_gmap"
+									center="-0.17737419883573421, -78.47622692584991"
+									type="ROADMAP" zoom="16" style="width:100%;height:300px"
+									model="#{actorCtr.model}" fitBounds="true">
+									<p:ajax event="pointSelect"
+										listener="#{actorCtr.onPointSelect}"
+										update="latitud longitud gmap" />
+								</p:gmap>
+							</div>
+						</div>
+						<br></br>
+						<div class="row">
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.latitud}" />
+								<h:inputText id="latitud"
+									value="#{actorCtr.actorReferencia.latitudAr}"
+									styleClass="form-control" />
+							</div>
+							<div class="col-sm-6">
+								<h:outputText value="#{msj.longitud}" />
+								<h:inputText id="longitud"
+									value="#{actorCtr.actorReferencia.longitudAr}"
+									styleClass="form-control" />
+							</div>
+						</div>
+
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<h:dataTable id="direccionesTbl"
+									styleClass="table table-striped"
+									value="#{actorCtr.direccionesActor}" var="direccion">
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.provincia}" />
+										</f:facet>
+										<h:outputText
+											value="#{direccion.localidad.localidad.localidad.locNombre}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.ciudad}" />
+										</f:facet>
+										<h:outputText
+											value="#{direccion.localidad.localidad.locNombre}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.barrio}" />
+										</f:facet>
+										<h:outputText value="#{direccion.localidad.locNombre}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.tipo}" />
+										</f:facet>
+										<h:outputText value="#{direccion.catalogoGen.nombreCg}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.direccion}" />
+										</f:facet>
+										<h:outputText
+											value="#{direccion.val2Ar} #{direccion.val4ar} y #{direccion.val3Ar} " />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.seleccionar}" />
+										</f:facet>
+										<p:commandLink process="@this" value="#{msj.seleccionar}"
+											update=":frmContacto:pGroupDireccion"
+											action="#{actorCtr.seleccionarDireccion}">
+											<f:setPropertyActionListener
+												target="#{actorCtr.actorReferencia}" value="#{direccion}" />
+										</p:commandLink>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.eliminar}" />
+										</f:facet>
+										<p:commandLink value="#{msj.eliminar}" process="@this"
+											update=":frmContacto:pGroupDireccion"
+											action="#{actorCtr.eliminarDireccion}">
+											<f:setPropertyActionListener
+												target="#{actorCtr.actorReferencia}" value="#{direccion}" />
+										</p:commandLink>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.nuevo}" process="@this"
+							styleClass="btn btn-default" update="pGroupDireccion"
+							action="#{actorCtr.nuevoActorReferencia}" />
+						&nbsp;
+						<p:commandLink value="#{msj.crear}" styleClass="btn btn-primary"
+							rendered="#{actorCtr.crearDireccionRender}"
+							action="#{actorCtr.crearActorReferencia}"
+							process="@this, pGroupDireccion" update="pGroupDireccion" />
+						<p:commandLink value="#{msj.actualizar}"
+							rendered="#{actorCtr.actDireccionRender}"
+							action="#{actorCtr.actualizarDireccion}"
+							process="@this, pGroupDireccion" update="pGroupDireccion" />
+					</div>
+				</div>
+			</h:panelGroup>
+			<br></br>
+
+			<!-- 		Horarios -->
+			<h:panelGroup id="pGroupHorarios">
+				<div class="panel panel-primary">
+					<div class="panel-heading">#{msj.agregarHorarios}</div>
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-4">
+								#{msj.seleccioneDiaHorario}
+								<h:selectOneMenu value="#{actorCtr.diaIdCgSeleccionado}"
+									styleClass="form-control">
+									<f:selectItems value="#{actorCtr.diasCatalogoGenListItem}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-4">
+								#{msj.desde}
+								<p:inputMask id="horaInicio" mask="99H99"
+									styleClass="form-control" required="true"
+									requiredMessage="#{msj.reqHoraInicioFin}"
+									value="#{actorCtr.horario.val1Ar}" />
+								<h:message for="horaInicio" errorClass="errorMsg" />
+							</div>
+							<div class="col-sm-4">
+								#{msj.hasta}
+								<p:inputMask id="horaFin" mask="99H99" required="true"
+									styleClass="form-control"
+									requiredMessage="#{msj.reqHoraInicioFin}"
+									value="#{actorCtr.horario.val2Ar}" />
+								<h:message for="horaFin" errorClass="errorMsg" />
+							</div>
+						</div>
+
+						<br></br>
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<h:dataTable id="horariosTbl" styleClass="table table-striped"
+									value="#{actorCtr.horariosActor}" var="horario">
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.dia}" />
+										</f:facet>
+										<h:outputText value="#{horario.catalogoGen.nombreCg}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.desde}" />
+										</f:facet>
+										<h:outputText value="#{horario.val1Ar}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.hasta}" />
+										</f:facet>
+										<h:outputText value="#{horario.val2Ar}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.seleccionar}" />
+										</f:facet>
+										<p:commandLink process="@this" value="#{msj.seleccionar}"
+											update=":frmContacto:pGroupHorarios"
+											action="#{actorCtr.seleccionarHorario}">
+											<f:setPropertyActionListener target="#{actorCtr.horario}"
+												value="#{horario}" />
+										</p:commandLink>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.eliminar}" />
+										</f:facet>
+										<p:commandLink value="#{msj.eliminar}" process="@this"
+											update=":frmContacto:pGroupHorarios"
+											action="#{actorCtr.eliminarHorario}">
+											<f:setPropertyActionListener target="#{actorCtr.horario}"
+												value="#{horario}" />
+										</p:commandLink>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.nuevo}" process="@this"
+							styleClass="btn btn-default" update="pGroupHorarios"
+							action="#{actorCtr.nuevoHorario}" />
+						&nbsp;
+						<p:commandLink value="#{msj.crear}" styleClass="btn btn-primary"
+							rendered="#{actorCtr.crearHorarioRender}"
+							actionListener="#{actorCtr.crearHorario}"
+							process="@this, pGroupHorarios" update="pGroupHorarios" />
+						<p:commandLink value="#{msj.actualizar}"
+							rendered="#{actorCtr.actHorarioRender}"
+							actionListener="#{actorCtr.actualizarHorario}"
+							process="@this, pGroupHorarios" update="pGroupHorarios" />
+					</div>
+				</div>
+			</h:panelGroup>
+			<br></br>
+
+			<!-- Contactos Digitales -->
+			<h:panelGroup id="pGroupContactosDigitales">
+				<div class="panel panel-primary">
+					<div class="panel-heading">#{msj.agregarContactosDigitales}</div>
+					<div class="panel-body">
+
+						<div class="row">
+							<div class="col-sm-6">
+								<p:outputLabel for="contactoDigitalIdSeleccionado"
+									value="#{msj.seleccioneTipoContacto}" />
+								<h:selectOneMenu id="contactoDigitalIdSeleccionado"
+									required="true" requiredMessage="#{msj.reqTipoContacto}"
+									value="#{actorCtr.contactoDigitalIdSeleccionado}"
+									styleClass="form-control">
+									<f:selectItem noSelectionOption="true"
+										itemLabel="#{msj.seleccione}" />
+									<f:selectItems value="#{actorCtr.catalogoDigitalListItem}" />
+								</h:selectOneMenu>
+							</div>
+							<div class="col-sm-6">
+								<p:outputLabel for="contactoDigitalUrl" value="Ingrese URL" />
+								<p:inputText id="contactoDigitalUrl"
+									value="#{actorCtr.contactoDigital.val1Ar}" required="true"
+									requiredMessage="Url es requerida" style="width: 100%;" />
+							</div>
+						</div>
+
+						<br></br>
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<h:dataTable id="contactosDigitalesTbl"
+									styleClass="table table-striped"
+									value="#{actorCtr.contactosDigitalesAct}" var="contactoDigital">
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="Tipo" />
+										</f:facet>
+										<h:outputText value="#{contactoDigital.catalogoGen.nombreCg}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="Url" />
+										</f:facet>
+										<h:outputText value="#{contactoDigital.val1Ar}" />
+									</h:column>
+
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.seleccionar}" />
+										</f:facet>
+										<p:commandLink process="@this" value="#{msj.seleccionar}"
+											update=":frmContacto:pGroupContactosDigitales"
+											action="#{actorCtr.seleccionarContactoDigital}">
+											<f:setPropertyActionListener
+												target="#{actorCtr.contactoDigital}"
+												value="#{contactoDigital}" />
+										</p:commandLink>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.eliminar}" />
+										</f:facet>
+										<p:commandLink value="#{msj.eliminar}" process="@this"
+											update=":frmContacto:pGroupContactosDigitales"
+											action="#{actorCtr.eliminarContactoDigital}">
+											<f:setPropertyActionListener
+												target="#{actorCtr.contactoDigital}"
+												value="#{contactoDigital}" />
+										</p:commandLink>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.nuevo}" process="@this"
+							styleClass="btn btn-default" update="pGroupContactosDigitales"
+							actionListener="#{actorCtr.nuevoContactoDigital}" />
+						&nbsp;
+						<p:commandLink value="#{msj.crear}" styleClass="btn btn-primary"
+							rendered="#{actorCtr.crearContactoDigitalRender}"
+							actionListener="#{actorCtr.crearContactoDigital}"
+							process="@this,pGroupContactosDigitales"
+							update="pGroupContactosDigitales" />
+						<p:commandLink value="#{msj.actualizar}"
+							rendered="#{actorCtr.actContactoDigital}"
+							actionListener="#{actorCtr.actualizarContactoDigital}"
+							process="@this, pGroupContactosDigitales"
+							update="pGroupContactosDigitales" />
+					</div>
+				</div>
+			</h:panelGroup>
+
+			<!-- Imagenes -->
+			<h:panelGroup id="pGroupImagenes">
+				<div class="panel panel-primary">
+					<div class="panel-heading">#{msj.agregarImagenes}</div>
+					<div class="panel-body">
+
+						<h:outputText value="#{msj.seleccioneTipoImagen}" />
+						<h:selectOneMenu id="Tipo"
+							value="#{actorCtr.imagenIdCgSeleccionado}"
+							styleClass="form-control" required="true"
+							requiredMessage="#{msj.seleccioneTipoImagen}"
+							validatorMessage="#{msj.seleccioneTipoImagen}">
+							<f:selectItem itemLabel="#{msj.seleccione}"
+								noSelectionOption="true" />
+							<f:selectItems value="#{actorCtr.imagenCatalogoGenListItem}" />
+							<p:ajax event="change"
+								listener="#{actorCtr.seleccionarTipoImagen}"
+								update="pGroupImagenes" process="@this" />
+						</h:selectOneMenu>
+						<br></br>
+
+						<h:outputText value="#{msj.seleccioneImagen}" />
+						<p:fileUpload id="fu1" mode="advanced"
+							rendered="#{actorCtr.fileUploadRender}"
+							fileUploadListener="#{actorCtr.handleFileUpload2}"
+							update="pGroupImagenes" allowTypes="/(\.|\/)(png|jpg|jpeg)$/"
+							sizeLimit="500000" />
+						<br></br> <br></br>
+						<h:outputText value="Imágen Seleccionada" />
+						<br></br>
+						<h:graphicImage value="/imagenes/#{actorCtr.imagen.val1Ar}"
+							width="300" height="300" />
+						<br></br>
+						<div class="col-md-12">
+							<div class="table-responsive">
+								<h:dataTable id="galeriaTbl" styleClass="table table-striped"
+									value="#{actorCtr.imagenesActor}" var="galeria">
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.imagen}" />
+										</f:facet>
+										<h:graphicImage value="/imagenes/#{galeria.val1Ar}"
+											styleClass="img-roundedF" width="100" height="100" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.nombreArchivo}" />
+										</f:facet>
+										<h:outputText value="#{galeria.val1Ar}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.tipo}" />
+										</f:facet>
+										<h:outputText value="#{galeria.catalogoGen.nombreCg}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.editar}" />
+										</f:facet>
+										<p:commandLink process="@this" value="#{msj.editar}"
+											update=":frmContacto:pGroupImagenes"
+											action="#{actorCtr.seleccionarImagen}">
+											<f:setPropertyActionListener target="#{actorCtr.imagen}"
+												value="#{galeria}" />
+										</p:commandLink>
+									</h:column>
+									<h:column>
+										<f:facet name="header">
+											<h:outputText value="#{msj.eliminar}" />
+										</f:facet>
+										<p:commandLink value="#{msj.eliminar}" process="@this"
+											update=":frmContacto:pGroupImagenes"
+											action="#{actorCtr.eliminarImagen}">
+											<f:setPropertyActionListener target="#{actorCtr.imagen}"
+												value="#{galeria}" />
+										</p:commandLink>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+					</div>
+					<div class="panel-footer" align="right"></div>
+				</div>
+			</h:panelGroup>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaCategoria01">
+			<div class="row">
+				<div class="col-sm-12">
+					<div>
+						<h:outputText value="#{conLocalVentaCtr.localVenta.lvNombreCom}" style="FONT-SIZE: xx-large;"/>
+						<p:commandLink process="@this" styleClass="pull-right"
+									rendered="#{conLocalVentaCtr.localVenta.lvpromo eq 'S'}"
+									action="conLocalPromociones">
+									<h:graphicImage value="/imagenes/bt_promocion.png" />
+						</p:commandLink>
+						<p:commandLink process="@this" styleClass="pull-right"
+							rendered="#{conLocalVentaCtr.localVenta.lvgeo eq 'S'}"
+							action="#{conLocalVentaCtr.verLocalVenta}">
+							<h:graphicImage value="/imagenes/bt_infoygeo.png"/>
+						</p:commandLink>
+					</div>
+				</div>
+			</div>
+						
+			<div class="row" align="center">
+					<div class="col-sm-12" align="center">
+						
+						<!-- <p:contentFlow value="#{conLocalVentaCtr.localVenta.localPromocionBRList}" var="localPromocion">
+						   <p:graphicImage value="/imagenes/#{localPromocion.lpImagen}" styleClass="content" height="666" width="1000"/>
+						</p:contentFlow> -->
+						
+						<p:commandButton type="button" onclick="PF('switcher').previo us();"
+						    icon="ui-icon-circle-triangle-w" id="prev"/>
+						<p:commandButton type="button" onclick="PF('switcher').next();"
+						    icon="ui-icon-circle-triangle-e" id="next"/>
+						 
+						<p:imageSwitch effect="shuffle" widgetVar="switcher"  slideshowAuto="true">
+						    <ui:repeat value="#{conLocalVentaCtr.localVenta.localPromocionBRList}" var="localPromocion">
+						        <p:graphicImage value="/imagenes/#{localPromocion.lpImagen}" height="666" width="1000"/>
+						    </ui:repeat>
+						</p:imageSwitch>
+					</div>
+				</div>
+			
+			<!-- <div class="row" align="center">
+				<div class="col-sm-12" align="center">
+					<p:galleria panelHeight="666" panelWidth="1000"
+						transitionInterval="2000" autoPlay="true"
+						value="#{conLocalVentaCtr.localVenta.localPromocionBRList}"
+						var="localPromocion">
+						<p:graphicImage value="/imagenes/#{localPromocion.lpImagen}"
+							height="666" width="1000" />
+					</p:galleria>
+				</div>
+			</div> 
+			
+			<div class="row" align="center">
+				<div class="col-sm-12" align="center">
+					<p:imageSwitch effect="shuffle" panelHeight="666" panelWidth="1000">
+				    <ui:repeat value="#{conLocalVentaCtr.localVenta.localPromocionBRList}" var="localPromocion">
+				        <p:graphicImage value="/imagenes/#{localPromocion.lpImagen}"
+							height="666" width="1000" />
+				    </ui:repeat>
+				</p:imageSwitch>
+				</div>
+			</div>-->
+			
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
+
+
+<!-- <div class="panel-heading"> -->
+<!-- 	<h3 class="panel-title pull-left">#{conLocalVentaCategoria01.categoria.catNombre} -->
+<!-- 	</h3> -->
+<!-- 	<p:commandLink value="#{msj.todasCategorias}" process="@this" -->
+<!-- 		styleClass="btn btn-default pull-right" type="button" -->
+<!-- 		action="#{conLocalVentaCategoria01.recuperarLocalVentaList2}" -->
+<!-- 		update="pGroupLocalVentaList" /> -->
+<!-- 	<div class="clearfix"></div> -->
+<!-- </div> -->
+
+
+<!-- 	<h3 class="panel-title pull-left">#{localVenta.lvNombreCom} -->
+<!-- 							</h3> -->
+<!-- 							<p:commandLink value="#{msj.verMas}" process="@this" -->
+<!-- 								styleClass="btn btn-default pull-right" type="button" -->
+<!-- 								action="#{conLocalVentaCtr.seleccionarLocalVenta}"> -->
+<!-- 								<f:setPropertyActionListener -->
+<!-- 									target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" /> -->
+<!-- 							</p:commandLink> -->
+<!-- 							<div class="clearfix"></div> -->

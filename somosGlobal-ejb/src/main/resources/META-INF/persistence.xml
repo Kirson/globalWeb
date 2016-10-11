@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="cashback2_JPA" transaction-type="JTA">
+    <!--<jta-data-source>java:module/jdbc/cashback2DataSource</jta-data-source>-->
+    <jta-data-source>jdbc/cashback2</jta-data-source>
+    <class>com.cashback.model.Actor</class>
+    <class>com.cashback.model.ActorReferencia</class>
+    <class>com.cashback.model.Appmensaje</class>
+    <class>com.cashback.model.Barrio</class>
+    <class>com.cashback.model.CatalogoGen</class>
+    <class>com.cashback.model.Categoria</class>
+    <class>com.cashback.model.CategoriaProducto</class>
+    <class>com.cashback.model.Ciudad</class>
+    <class>com.cashback.model.Contacto</class>
+    <class>com.cashback.model.Hobbie</class>
+    <class>com.cashback.model.HobbiePersona</class>
+    <class>com.cashback.model.HorarioAtencion</class>
+    <class>com.cashback.model.Licencia</class>
+    <class>com.cashback.model.LocalPromocion</class>
+    <class>com.cashback.model.LocalVenta</class>
+    <class>com.cashback.model.Menu</class>
+    <class>com.cashback.model.MenuPerfil</class>
+    <class>com.cashback.model.Nota</class>
+    <class>com.cashback.model.ParametrosGen</class>
+    <class>com.cashback.model.Perfil</class>
+    <class>com.cashback.model.Persona</class>
+    <class>com.cashback.model.Provincia</class>
+    <class>com.cashback.model.Puntos</class>
+    <class>com.cashback.model.TextoClave</class>
+    <class>com.cashback.model.Transaccion</class>
+    <class>com.cashback.model.Ubicacion</class>
+    <class>com.cashback.model.Usuario</class>
+    <class>com.cashback.model.Localidad</class>
+    <class>com.cashback.model.ActorRol</class>
+    <properties>
+        <property name="eclipselink.logging.level.sql" value="FINE" />
+	<property name="eclipselink.logging.parameters" value="true" />
+        <property name="hibernate.format_sql" value="false" />
+	<property name="hibernate.show_sql" value="true" />  
+	<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+        <property name="javax.persistence.schema-generation.database.action" value="create"/>
+    </properties>
+  </persistence-unit>
+</persistence>

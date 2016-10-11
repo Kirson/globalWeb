@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+
+		<h:form id="frmMntUsuario" rendered="#{loginCtr.usuario!=null}">
+			<p:panel header="#{msj.mantenimientoUsuario}">
+				<p:panelGrid columns="2">
+					<p:commandButton value="#{msj.nuevo}" icon="ui-icon-plusthick"
+						onclick="PF('dlgMntUsuario').show()"
+						action="#{usuarioCtr.nuevoUsuario}" process="@this"
+						update="pgMntUsuario">
+					</p:commandButton>
+
+					<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+						onclick="PF('dlgUsuarioBuscar').show()" process="@this" />
+				</p:panelGrid>
+			</p:panel>
+
+			<p:dialog widgetVar="dlgMntUsuario" modal="true">
+				<p:panel id="pnlMntUsuario">
+					<h:panelGrid id="pgMntUsuario" columns="2">
+						<p:outputLabel value="#{msj.codigo}" />
+						<p:outputLabel value="#{usuarioCtr.usuario.usrId}" />
+
+						<p:outputLabel value="#{msj.nombreUsuario}" />
+						<p:inputText value="#{usuarioCtr.usuario.usrNombre}" />
+
+						<p:outputLabel value="#{msj.persona}" />
+						<p:commandButton value="#{msj.seleccionar}" process="@this"
+							onclick="PF('dlgPersonaBuscar').show()" />
+
+						<p:outputLabel value="#{msj.nombresCompletos}" />
+						<p:outputLabel id="lblNombresPersona"
+							value="#{usuarioCtr.persona.perNombres} #{usuarioCtr.persona.perApellidos}" />
+
+						<p:outputLabel for="somPrfId" value="#{msj.perfil}" />
+						<p:selectOneMenu id="somPrfId"
+							value="#{usuarioCtr.prfIdSeleccionado}" required="true">
+							<f:selectItem noSelectionOption="true" itemValue="0"
+								itemLabel="#{msj.seleccionar}" />
+							<f:selectItems value="#{usuarioCtr.perfilListItem}" />
+						</p:selectOneMenu>
+
+						<p:outputLabel for="sorUsrEstado" value="#{msj.estado}" />
+
+						<p:selectOneRadio id="sorUsrEstado" required="true"
+							requiredMessage="#{msj.reqCampo}"
+							value="#{usuarioCtr.usuario.usrEstado}">
+							<f:selectItem itemValue="OK" itemLabel="#{msj.activo}" />
+							<f:selectItem itemValue="ANU" itemLabel="#{msj.inactivo}" />
+						</p:selectOneRadio>
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton value="#{msj.crear}" process="pgMntUsuario"
+									update="pgMntUsuario" action="#{usuarioCtr.crearUsuario}"
+									rendered="#{usuarioCtr.crearUsuarioRender}" />
+								<p:commandButton value="#{msj.actualizar}"
+									process="pgMntUsuario" update="pgMntUsuario tblUsuario"
+									action="#{usuarioCtr.actualizarUsuario}"
+									oncomplete="PF('dlgMntUsuario').hide()"
+									rendered="#{usuarioCtr.actualizarUsuarioRender}" />
+							</center>
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgUsuarioBuscar" modal="true" width="75%">
+				<p:panel id="pnlUsuarioBuscar">
+					<h:panelGrid id="pgUsuarioBuscar" columns="2">
+						<p:outputLabel value="#{msj.nombreUsuario}" />
+						<p:inputText value="#{usuarioCtr.usrNombre}" />
+						<f:facet name="footer">
+							<center>
+								<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+									process="pgUsuarioBuscar" update="pnlUsuarioBuscar"
+									action="#{usuarioCtr.recuperarUsuarioList}" />
+							</center>
+						</f:facet>
+					</h:panelGrid>
+					<br></br>
+					<p:dataTable id="tblUsuario" value="#{usuarioCtr.usuarioList}"
+						var="usuario">
+						<f:facet name="header">
+							<h:outputText value="#{msj.registrosEncontrados}" />
+						</f:facet>
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{usuario.usrId}" />
+						</p:column>
+						<p:column headerText="#{msj.nombreUsuario}">
+							<h:outputText value="#{usuario.usrNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.nombres}">
+							<h:outputText
+								value="#{usuario.persona.perApellidos} #{usuario.persona.perNombres}" />
+						</p:column>
+						<p:column headerText="#{msj.estado}">
+							<h:outputText value="#{usuario.usrEstado}" />
+						</p:column>
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton id="cmdSeleccionarUsuario" process="@this"
+									title="#{msj.seleccionar}" update=":frmMntUsuario:pgMntUsuario"
+									icon="ui-icon-circle-check"
+									action="#{usuarioCtr.seleccionarUsuario}"
+									oncomplete="PF('dlgMntUsuario').show()">
+									<f:setPropertyActionListener target="#{usuarioCtr.usuario}"
+										value="#{usuario}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgPersonaBuscar" modal="true">
+				<p:panel id="pnlPersonaList">
+					<p:panelGrid id="pgPersonaBuscar" columns="2">
+						<p:outputLabel value="#{msj.cedRucPas}" />
+						<p:inputText value="#{usuarioCtr.perCedRuc}" />
+
+						<p:outputLabel value="#{msj.nombres}" />
+						<p:inputText value="#{usuarioCtr.perNombres}" />
+
+						<p:outputLabel value="#{msj.apellidos}" />
+						<p:inputText value="#{usuarioCtr.perApellidos}" />
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+									action="#{usuarioCtr.recuperarPersonaList}"
+									process="pgPersonaBuscar" update="pgPersonaBuscar tblPersona" />
+							</center>
+						</f:facet>
+
+					</p:panelGrid>
+					<br></br>
+					<p:dataTable id="tblPersona" value="#{usuarioCtr.personaList}"
+						var="persona" rows="10" paginator="true"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15">
+						<f:facet name="header">
+							<h:outputText value="#{msj.registrosEncontrados}" />
+						</f:facet>
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{persona.perId}" />
+						</p:column>
+						<p:column headerText="#{msj.nombresCompletos}">
+							<h:outputText
+								value="#{persona.perApellidos} #{persona.perNombres}" />
+						</p:column>
+
+						<p:column headerText="#{msj.cedRucPas}" style="text-align:right">
+							<h:outputText value="#{persona.perCedRucPas}" />
+						</p:column>
+
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton icon="ui-icon-circle-check" process="@this"
+									title="#{msj.seleccionar}"
+									update=":frmMntUsuario:lblNombresPersona"
+									oncomplete="PF('dlgPersonaBuscar').hide()">
+									<f:setPropertyActionListener target="#{usuarioCtr.persona}"
+										value="#{persona}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:dialog>
+			<p:growl autoUpdate="true" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

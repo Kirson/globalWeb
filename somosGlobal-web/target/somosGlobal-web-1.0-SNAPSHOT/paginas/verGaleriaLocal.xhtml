@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaCategoria01">
+
+			<div class="row">
+				<div class="col-sm-12">
+					<div>
+						<h:outputText value="#{actorLocalCtrl.localActor.razonSocialAct}"
+							style="FONT-SIZE: xx-large;" />
+						<p:commandLink process="@this" styleClass="pull-right" rendered="#{actorLocalCtrl.verPromociones}"
+							action="#{actorLocalCtrl.verPromocionLocal}">
+							<h:graphicImage value="/imagenes/bt_vermas.png" />
+						</p:commandLink>	
+						<p:commandLink process="@this" styleClass="pull-right" rendered="#{actorLocalCtrl.verGaleria}"
+							action="#{actorLocalCtrl.verPromocionLocal}">
+							<h:graphicImage value="/imagenes/bt_promocion.png" />
+						</p:commandLink>
+						<p:commandLink process="@this" styleClass="pull-right"
+							action="#{actorLocalCtrl.verActorLocal}">
+							<h:graphicImage value="/imagenes/bt_infoygeo.png" />
+						</p:commandLink>
+					</div>
+				</div>
+			</div>
+			<div align="center">
+				<h:panelGroup id="galeriaPGrid"
+					rendered="#{actorLocalCtrl.verGaleria}">
+					<div class="row" align="center">
+						<div class="col-sm-12" align="center">
+							<p:commandButton type="button"
+								onclick="PF('switcher').previous();"
+								icon="ui-icon-circle-triangle-w" id="prev" />
+							<p:commandButton type="button" onclick="PF('switcher').next();"
+								icon="ui-icon-circle-triangle-e" id="next" />
+
+							<p:imageSwitch effect="shuffle" widgetVar="switcher"
+								panelHeight="666" panelWidth="1000" slideshowAuto="true">
+								<ui:repeat value="#{actorLocalCtrl.localActor.galeriaImgActor}"
+									var="galeria">
+									<p:graphicImage value="/imagenes/#{galeria.val1Ar}"
+										styleClass="img-responsive" height="500" width="900" />
+								</ui:repeat>
+							</p:imageSwitch>
+						</div>
+					</div>
+				</h:panelGroup>
+
+				<h:panelGroup id="promocionPGrid"
+					rendered="#{actorLocalCtrl.verPromociones}">
+					<div class="row">
+						<div class="col-sm-12" align="center">
+							<p:commandButton type="button"
+								onclick="PF('switcher').previous();"
+								icon="ui-icon-circle-triangle-w" id="prev2" />
+							<p:commandButton type="button" onclick="PF('switcher').next();"
+								icon="ui-icon-circle-triangle-e" id="next2" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12" align="center">
+							<p:imageSwitch effect="shuffle" widgetVar="switcher"
+								panelHeight="666" panelWidth="1000" slideshowAuto="true">
+								<ui:repeat
+									value="#{actorLocalCtrl.localActor.promocionImgActor}"
+									var="galeria">
+									<p:graphicImage value="/imagenes/#{galeria.val1Ar}"
+										styleClass="img-responsive img-rounded" height="500"
+										width="900" />
+								</ui:repeat>
+							</p:imageSwitch>
+						</div>
+					</div>
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

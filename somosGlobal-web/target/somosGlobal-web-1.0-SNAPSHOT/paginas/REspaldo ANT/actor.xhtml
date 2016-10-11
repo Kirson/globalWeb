@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form>
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{msj.crearActor}</div>
+				<div class="panel-body" align="center">
+					<p:commandLink value="#{msj.crearSupervisorHolding}" type="button"
+						rendered="#{loginCtr.global}"
+						styleClass="btn btn-default btn-block"
+						action="#{actorCtr.asignarTipoCuenta}" process="@this">
+						<f:setPropertyActionListener target="#{actorCtr.refCg}" value="SH" />
+					</p:commandLink>
+					<hr></hr>
+
+					<p:commandLink value="#{msj.crearHolding}" process="@this"
+						rendered="#{loginCtr.supervisorHolding}" type="button"
+						styleClass="btn btn-default btn-block"
+						action="#{actorCtr.asignarTipoCuenta}">
+						<f:setPropertyActionListener target="#{actorCtr.refCg}" value="HL" />
+					</p:commandLink>
+					<hr></hr>
+
+					<p:commandLink value="#{msj.crearGrupoEmpresarial}" type="button"
+						rendered="#{loginCtr.holding}"
+						styleClass="btn btn-default btn-block"
+						action="#{actorCtr.asignarTipoCuenta}" process="@this">
+						<f:setPropertyActionListener target="#{actorCtr.refCg}" value="GE" />
+					</p:commandLink>
+					<hr></hr>
+
+					<p:commandLink value="#{msj.crearLocal}" process="@this"
+						rendered="#{loginCtr.grupoEmpresarial}" type="button"
+						styleClass="btn btn-default btn-block"
+						action="#{actorCtr.asignarTipoCuenta}">
+						<f:setPropertyActionListener target="#{actorCtr.refCg}" value="GA" />
+					</p:commandLink>
+					<hr></hr>
+
+					<p:commandLink value="#{msj.crearConsumidor}" process="@this"
+						rendered="#{loginCtr.local}" type="button"
+						styleClass="btn btn-default btn-block"
+						action="#{actorCtr.asignarTipoCuenta}">
+						<f:setPropertyActionListener target="#{actorCtr.refCg}" value="CS" />
+					</p:commandLink>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

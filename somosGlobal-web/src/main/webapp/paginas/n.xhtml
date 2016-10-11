@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaCategoria01">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title pull-left">#{conLocalVentaCategoria01.categoria.catNombre}
+					</h3>
+					<p:commandLink value="#{msj.todasCategorias}" process="@this"
+						styleClass="btn btn-default pull-right" type="button"
+						action="#{conLocalVentaCategoria01.recuperarLocalVentaList2}"
+						update="pGroupLocalVentaList" />
+					<div class="clearfix"></div>
+				</div>
+				<div class="panel-body">
+					<div class="row" style="text-align:center; margin-left: 15%;">
+						<h:selectOneMenu styleClass="form-control" style="width: 80%;"
+							value="#{conLocalVentaCategoria01.catIdSeleccionada}">
+							<f:selectItems
+								value="#{conLocalVentaCategoria01.categoriaListItem}" />
+							<f:ajax event="change"
+								listener="#{conLocalVentaCategoria01.recuperarLocalVentaList}"
+								execute="@this" render="@form" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+
+			<hr></hr>
+			<h:panelGroup id="pGroupLocalVentaList">
+				<ui:repeat var="localVenta"
+					value="#{conLocalVentaCategoria01.localVentaList}">
+				<div class="panel panel-primary">
+						<div class="panel-heading">
+							<h3 class="panel-title pull-left">#{localVenta.lvNombreCom}
+							</h3>
+							<p:commandLink value="#{msj.verMas}" process="@this"
+								styleClass="btn btn-default pull-right" type="button"
+								action="#{conLocalVentaCtr.seleccionarLocalVenta}">
+								<f:setPropertyActionListener
+									target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+							</p:commandLink>
+							<div class="clearfix"></div>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-4">
+									<h:graphicImage width="75px" height="75px"
+										styleClass="img-circle" value="/imagenes/#{localVenta.lvLogo}" />
+									<br></br> <br></br>
+									<div class="panel panel-info">
+
+										<div class="panel-body"
+											style="max-height: 300px; overflow-y: scroll;">
+											<h:dataTable value="#{localVenta.ubicacions}"
+												styleClass="table table-striped" var="ubicacion">
+												<h:column>
+													<f:facet name="header">
+														#{msj.sector}
+													</f:facet>
+														#{ubicacion.barrio.barNombre}
+												</h:column>
+												<h:column>
+													<f:facet name="header">
+													#{msj.ubicacion}
+												</f:facet>
+													<p class="text-capitalize list-group-item-text">#{ubicacion.ubiCallePrin}
+														#{ubicacion.ubiNumPredio} y #{ubicacion.ubiCalleSec}</p>
+												</h:column>
+											</h:dataTable>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-8">
+									<div class="panel panel-default">
+										<div class="panel-heading">#{msj.imagenesPromociones}</div>
+										<div class="panel-body">
+											<p:contentFlow value="#{localVenta.localPromocionList}"
+												var="image">
+												<h:graphicImage value="/imagenes/#{image.lpImagen}"
+													styleClass="content" />
+											</p:contentFlow>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</ui:repeat>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

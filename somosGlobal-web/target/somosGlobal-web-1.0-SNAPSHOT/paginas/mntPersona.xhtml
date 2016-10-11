@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="titulo">
+		<h:outputText value="#{msj.mantenimientoPersona}" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="frmMntPersona" rendered="#{loginCtr.usuario!=null}">
+			<p:fieldset legend="#{msj.buscar}" toggleable="true" collapsed="true">
+				<h:panelGrid id="pgBuscarPersonaCodigo" columns="3">
+					<p:outputLabel for="txtCodigoPersona" value="#{msj.codigo}" />
+					<p:inputText id="txtCodigoPersona" value="#{mntPersonaCtr.codigo}"
+						required="true" requiredMessage="#{msj.reqCodigo}" />
+					<p:commandButton id="btnBuscarPersonaCodigo" icon="ui-icon-search"
+						value="#{msj.buscar}" action="#{mntPersonaCtr.recuperarPersona}"
+						process="pgBuscarPersonaCodigo"
+						update="pgBuscarPersonaCodigo tblPersona" />
+				</h:panelGrid>
+				<h:panelGrid id="pgBuscarPersona2" columns="2">
+					<p:outputLabel value="#{msj.cedRucPas}" />
+					<p:inputText value="#{mntPersonaCtr.perCedRuc}" />
+
+					<p:outputLabel value="#{msj.nombres}" />
+					<p:inputText value="#{mntPersonaCtr.nombres}" />
+
+					<p:outputLabel value="#{msj.apellidos}" />
+					<p:inputText value="#{mntPersonaCtr.apellidos}" />
+				</h:panelGrid>
+				<p:commandButton value="#{msj.buscar}" icon="ui-icon-search"
+					action="#{mntPersonaCtr.recuperarPersonaList}"
+					process="pgBuscarPersona2, @this" update="tblPersona" />
+				<br></br>
+				<div class="scrollDivVertical">
+					<p:dataTable id="tblPersona" value="#{mntPersonaCtr.personaList}"
+						var="persona">
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{persona.perId}" />
+						</p:column>
+						<p:column headerText="#{msj.apellidos}">
+							<h:outputText value="#{persona.perApellidos}" />
+						</p:column>
+
+						<p:column headerText="#{msj.nombres}">
+							<h:outputText value="#{persona.perNombres}" />
+						</p:column>
+						<p:column headerText="#{msj.cedRucPas}" style="text-align:right">
+							<h:outputText value="#{persona.perCedRucPas}" />
+						</p:column>
+						<p:column headerText="#{msj.email}">
+							<h:outputText value="#{persona.perEmail}" />
+						</p:column>
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton icon="ui-icon-pencil" process="@this"
+									update=":frmMntPersona:pnlMntPersona" title="#{msj.editar}"
+									action="#{mntPersonaCtr.seleccionarPersona}">
+									<f:setPropertyActionListener target="#{mntPersonaCtr.persona}"
+										value="#{persona}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-note" title="#{msj.hobbie}"
+									action="#{mntPersonaCtr.recuperarHobbiePersonaList}"
+									process="@this" oncomplete="PF('dlgHobbiePersona').show()"
+									update=":frmMntPersona:dlgHobbiePersona :frmMntPersona:tblHobbiePersona">
+									<f:setPropertyActionListener target="#{mntPersonaCtr.persona}"
+										value="#{persona}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-person"
+									action="#{mntPersonaCtr.recuperarContactoList}"
+									onclick="PF('dlgContactoList').show()"
+									title="#{msj.contactosLista}" process="@this"
+									update=":frmMntPersona:tblContacto">
+									<f:setPropertyActionListener target="#{mntPersonaCtr.persona}"
+										value="#{persona}" />
+								</p:commandButton>
+								<p:commandButton icon="ui-icon-circle-check"
+									onclick="PF('dlgVerPuntos').show()" process="@this"
+									update=":frmMntPersona:tblPuntos"
+									action="#{mntPersonaCtr.recuperarPuntosList}">
+									<f:setPropertyActionListener target="#{mntPersonaCtr.persona}"
+										value="#{persona}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</p:fieldset>
+			<br></br>
+			<p:panel header="#{msj.datosPersona}" id="pnlMntPersona">
+				<h:panelGrid id="pgMntPersona" columns="2">
+					<p:outputLabel value="#{msj.codigo}" />
+					<p:outputLabel value="#{mntPersonaCtr.persona.perId}" />
+
+					<p:outputLabel for="txtPerNombres" value="#{msj.nombres}" />
+					<p:inputText id="txtPerNombres" onblur="value=value.toUpperCase()"
+						value="#{mntPersonaCtr.persona.perNombres}" required="true"
+						requiredMessage="#{msj.reqNombres}" />
+
+					<p:outputLabel for="txtPerApellidos" value="#{msj.apellidos}" />
+					<p:inputText id="txtPerApellidos"
+						onblur="value=value.toUpperCase()"
+						value="#{mntPersonaCtr.persona.perApellidos}" required="true"
+						requiredMessage="#{msj.reqApellidos}" />
+
+					<p:outputLabel for="txtPerCedRucPas" value="#{msj.cedRucPas}" />
+					<p:inputText id="txtPerCedRucPas"
+						value="#{mntPersonaCtr.persona.perCedRucPas}" required="true"
+						requiredMessage="#{msj.reqCampo}" />
+
+					<p:outputLabel for="calPerFecNac" value="#{msj.fechaNacimiento}" />
+					<p:calendar id="calPerFecNac"
+						value="#{mntPersonaCtr.persona.perFecNac}" required="true"
+						requiredMessage="#{msj.reqFechaNacimiento}"
+						pattern="#{msj.forFechaCorta}" navigator="true"
+						showOtherMonths="true" showButtonPanel="true" showWeek="true" />
+
+					<p:outputLabel for="txtPerSexo" value="#{msj.genero}" />
+					<p:selectOneRadio id="txtPerSexo"
+						value="#{mntPersonaCtr.persona.perSexo}">
+						<f:selectItem itemValue="0" itemLabel="#{msj.femenino}" />
+						<f:selectItem itemValue="1" itemLabel="#{msj.masculino}" />
+					</p:selectOneRadio>
+
+					<p:outputLabel for="txtPerEmail" value="#{msj.email}" />
+					<p:inputText id="txtPerEmail"
+						value="#{mntPersonaCtr.persona.perEmail}" required="true"
+						requiredMessage="#{msj.reqEmail}" validator="validadorEmail"
+						validatorMessage="#{msj.errorEmail}" />
+				</h:panelGrid>
+				<f:facet name="footer">
+					<center>
+						<p:commandButton value="#{msj.nuevo}" icon="ui-icon-plusthick"
+							process="@this" update="pnlMntPersona"
+							action="#{mntPersonaCtr.nuevaPersona}">
+							<p:focus for="txtPerNombres" />
+						</p:commandButton>
+						<p:commandButton id="btnCrearPersona" value="#{msj.crear}"
+							process="pgMntPersona, @this" update="pnlMntPersona"
+							action="#{mntPersonaCtr.crearPersona}"
+							rendered="#{mntPersonaCtr.nuevaPersonaRender}" />
+						<p:commandButton id="btnActualizarPersona"
+							action="#{mntPersonaCtr.actualizarPersona}"
+							rendered="#{mntPersonaCtr.actualizarPersonaRender}"
+							value="#{msj.actualizar}" process="pgMntPersona, @this"
+							update="pnlMntPersona" />
+					</center>
+				</f:facet>
+			</p:panel>
+			<p:dialog widgetVar="dlgHobbiePersona" modal="true"
+				id="dlgHobbiePersona" header="#{msj.mantenimientoHobbie}">
+				<p:outputLabel
+					value="#{mntPersonaCtr.persona.perApellidos} #{mntPersonaCtr.persona.perNombres}" />
+				<div align="left">
+					<p:commandButton value="#{msj.nuevo}" process="@this"
+						icon="ui-icon-plusthick" update="pgMntHobbiePersona "
+						onclick="PF('dlgMntHobbiePersona').show()"
+						action="#{mntPersonaCtr.nuevoHobbiePersona}" />
+				</div>
+				<p:dataTable id="tblHobbiePersona"
+					value="#{mntPersonaCtr.hobbiePersonaList}" var="hobbiePersona">
+					<p:column headerText="#{msj.hobbie}">
+						<h:outputText value="#{hobbiePersona.hobbie.hobNombre}" />
+					</p:column>
+					<p:column headerText="#{msj.estado}">
+						<center>
+							<h:outputText value="#{hobbiePersona.hpEstado}" />
+						</center>
+					</p:column>
+					<p:column headerText="#{msj.accion}">
+						<center>
+							<p:commandButton icon="ui-icon-pencil" process="@this"
+								update=":frmMntPersona:pgMntHobbiePersona"
+								oncomplete="PF('dlgMntHobbiePersona').show()"
+								action="#{mntPersonaCtr.seleccionarHobbiePersona}">
+								<f:setPropertyActionListener
+									target="#{mntPersonaCtr.hobbiePersona}"
+									value="#{hobbiePersona}" />
+							</p:commandButton>
+						</center>
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgMntHobbiePersona" modal="true"
+				header="#{msj.mantenimientoHobbie}" id="dlgMntHobbiePersona">
+				<p:outputPanel autoUpdate="true">
+					<p:outputLabel
+						value="#{mntPersonaCtr.persona.perApellidos} #{mntPersonaCtr.persona.perNombres}" />
+					<p:fieldset legend="#{msj.hobbie}">
+						<p:panelGrid id="pgMntHobbiePersona" columns="2">
+							<p:outputLabel for="hobbieItem" value="#{msj.hobbie}" />
+							<h:panelGroup>
+								<p:selectOneMenu id="hobbieItem"
+									value="#{mntPersonaCtr.codigoHobbieSeleccionado}"
+									required="true" requiredMessage="#{msj.reqHobbie}">
+									<f:selectItem noSelectionOption="true" itemValue="0"
+										itemLabel="#{msj.seleccionar}" />
+									<f:selectItems value="#{mntPersonaCtr.hobbieListItem}" />
+								</p:selectOneMenu>
+								<p:message for="hobbieItem" />
+							</h:panelGroup>
+
+							<p:outputLabel for="cmbHpEstado" value="#{msj.estado}" />
+							<h:panelGroup>
+								<p:selectOneRadio id="cmbHpEstado" required="true"
+									requiredMessage="#{msj.reqCampo}"
+									value="#{mntPersonaCtr.hobbiePersona.hpEstado}">
+									<f:selectItem itemValue="1" itemLabel="#{msj.activo}" />
+									<f:selectItem itemValue="0" itemLabel="#{msj.anulado}" />
+								</p:selectOneRadio>
+								<p:message for="cmbHpEstado" />
+							</h:panelGroup>
+
+							<f:facet name="footer">
+								<center>
+									<p:commandButton value="#{msj.guardar}"
+										process="pgMntHobbiePersona"
+										update="pgMntHobbiePersona tblHobbiePersona"
+										action="#{mntPersonaCtr.crearHobbiePersona}" />
+								</center>
+							</f:facet>
+						</p:panelGrid>
+					</p:fieldset>
+				</p:outputPanel>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgContactoList" header="#{msj.contactosLista}"
+				modal="true">
+				<div align="left">
+					<p:commandButton value="#{msj.nuevo}" icon="ui-icon-plusthick"
+						process="@this" onclick="PF('dlgMntContacto').show()"
+						action="#{mntPersonaCtr.nuevoContacto}" update="pgMntContacto" />
+				</div>
+				<p:dataTable id="tblContacto" value="#{mntPersonaCtr.contactoList}"
+					var="contacto">
+					<p:column headerText="#{msj.contacto}">
+						<h:outputText value="#{contacto.conDescripcion}" />
+					</p:column>
+					<p:column headerText="#{msj.tipoContacto}">
+						<h:outputText value="#{contacto.conTipo}" />
+					</p:column>
+					<p:column headerText="#{msj.accion}">
+						<center>
+							<p:commandButton process="@this" icon="ui-icon-pencil"
+								update=":frmMntPersona:pgMntContacto" title="#{msj.editar}"
+								oncomplete="PF('dlgMntContacto').show()"
+								action="#{mntPersonaCtr.seleccionarContacto}">
+								<f:setPropertyActionListener target="#{mntPersonaCtr.contacto}"
+									value="#{contacto}" />
+							</p:commandButton>
+						</center>
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgMntContacto" modal="true" width="80%"
+				header="#{msj.mantenimientoContacto}">
+				<h:panelGroup id="pgMntContacto">
+					<h:outputText
+						value="#{mntPersonaCtr.persona.perNombres} #{mntPersonaCtr.persona.perApellidos}" />
+					<br></br>
+					<p:panelGrid columns="2">
+						<f:facet name="header">
+							<h:outputText value="#{msj.datosContacto}" />
+						</f:facet>
+						<p:outputLabel value="#{msj.codigo}" />
+						<h:outputText value="#{mntPersonaCtr.contacto.conId}" />
+
+						<p:outputLabel for="txtConDescripcion" value="#{msj.contacto}" />
+						<p:inputText id="txtConDescripcion"
+							value="#{mntPersonaCtr.contacto.conDescripcion}" required="true"
+							requiredMessage="#{msj.reqCampo}" />
+
+						<p:outputLabel for="txtTipoContacto" value="#{msj.tipoContacto}" />
+						<p:inputText id="txtTipoContacto"
+							value="#{mntPersonaCtr.contacto.conTipo}" required="true"
+							requiredMessage="#{msj.reqCampo}" />
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton value="#{msj.crear}" process="pgMntContacto"
+									update="pgMntContacto tblContacto"
+									action="#{mntPersonaCtr.crearContacto}"
+									rendered="#{mntPersonaCtr.crearContactoRender}" />
+								<p:commandButton value="#{msj.actualizar}"
+									process="pgMntContacto" update="pgMntContacto tblContacto"
+									action="#{mntPersonaCtr.actualizarContacto}"
+									rendered="#{mntPersonaCtr.actualizarContactoRender}" />
+							</center>
+						</f:facet>
+					</p:panelGrid>
+				</h:panelGroup>
+			</p:dialog>
+
+			<p:dialog widgetVar="dlgVerPuntos" header="#{msj.consultaPuntos}"
+				modal="true">
+				<h:outputText
+					value="#{mntPersonaCtr.persona.perNombres} #{mntPersonaCtr.persona.perApellidos}" />
+				<br></br>
+				<p:dataTable id="tblPuntos" value="#{mntPersonaCtr.puntosList}"
+					scrollable="true" scrollHeight="300" var="puntos" rowIndexVar="it">
+					<p:column headerText="#{msj.linea}" style="text-align:right;"
+						width="2%">
+						<h:outputText value="#{it+1}" style="FONT-WEIGHT: bold;" />
+					</p:column>
+					<p:column headerText="#{msj.local}">
+						<h:outputText value="#{puntos.localVenta.lvNombreCom}" />
+					</p:column>
+					<p:column headerText="#{msj.puntos}">
+						<h:outputText value="#{puntos.ptoCantidad}" />
+					</p:column>
+					<p:column headerText="#{msj.valorDolares}">
+						<h:outputText value="#{puntos.ptoValor}" />
+					</p:column>
+					<p:column headerText="#{msj.desde}">
+						<h:outputText value="#{puntos.ptoVigDesde}">
+							<f:convertDateTime pattern="#{msj.forFechaCorta}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msj.hasta}">
+						<h:outputText value="#{puntos.ptoVigHasta}">
+							<f:convertDateTime pattern="#{msj.forFechaCorta}" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</p:dialog>
+			<p:growl autoUpdate="true" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="conCadenaValorFrm">
+			<p:growl autoUpdate="true" showDetail="true" />
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{msj.cadenaValor}</div>
+				<div class="panel-body">
+					#{msj.ingreseNumeroCedRucPas}
+					<div class="row">
+						<div class="col-sm-10">
+							<h:inputText value="#{cadenaValorCtr.cedrucpasAct}"
+								id="cedrucpasAct" styleClass="form-control" required="true"
+								requiredMessage="#{msj.reqCedRucPas}" />
+						</div>
+						<div class="col-sm-2">
+							<p:commandLink value="#{msj.consultar}"
+								process="@this, cedrucpasAct" update="tblActorRol"
+								styleClass="btn btn-default btn-block"
+								action="#{cadenaValorCtr.recuperarActorRolList}" />
+							
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<h:dataTable id="tblActorRol"
+								value="#{cadenaValorCtr.actorRolList}"
+								styleClass="table table-striped" var="actorRol">
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="#{msj.razonSocial}" />
+									</f:facet>
+									#{actorRol.actor.razonSocialAct}
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										#{msj.nombres}
+									</f:facet>
+									#{actorRol.actor.nombresAct} #{actorRol.actor.apellidosAct}
+								</h:column>
+
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="#{msj.porcentaje}" />
+									</f:facet>
+									#{actorRol.prcArol}
+								</h:column>
+								<h:column>
+									<f:facet name="header">
+										<h:outputText value="#{msj.accion}" />
+									</f:facet>
+									<p:commandLink value="#{msj.cambiar}" process="@this"
+										onclick="PF('actorRolDlg').show()"
+										update=":conCadenaValorFrm:pGroupValorPorcentaje">
+										<f:setPropertyActionListener
+											target="#{cadenaValorCtr.actorRol}" value="#{actorRol}" />
+									</p:commandLink>
+								</h:column>
+							</h:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<p:dialog widgetVar="actorRolDlg" header="#{msj.cambiarPorcentaje}"
+				modal="true">
+				<div class="panel panel-primary">
+					<div class="panel-heading">#{msj.cadenaValor}</div>
+					<div class="panel-body">
+						<h:panelGroup id="pGroupValorPorcentaje">
+							<h:outputText value="#{msj.ingreseNuevoPorcentaje}" />
+							<p:inputMask mask="99.99" id="prcArolTxt"
+								value="#{cadenaValorCtr.actorRol.prcArol}"
+								styleClass="form-control" required="true"
+								requiredMessage="#{msj.reqPorcentajeNivel}"
+								validatorMessage="#{msj.valValorNoPermitido}">
+								<f:validateDoubleRange maximum="100" minimum="0"/>
+							</p:inputMask>
+							<h:message for="prcArolTxt" errorClass="errorMsg" />
+						</h:panelGroup>
+					</div>
+					<div class="panel-footer" align="right">
+						<p:commandLink value="#{msj.cambiarPorcentaje}"
+							process="@this pGroupValorPorcentaje"
+							update="pGroupValorPorcentaje, tblActorRol"
+							action="#{cadenaValorCtr.actualizarActorRol}"
+							oncomplete="PF('actorRolDlg').hide()" />
+					</div>
+				</div>
+
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+
+		<h:form id="frmMntCategoria" rendered="#{loginCtr.usuario!=null}">
+			<p:dialog modal="true" widgetVar="dlgMntCategoria"
+				header="#{msj.mantenimientoCategoria}">
+				<p:messages id="msjMntCategoria" closable="true" />
+
+				<p:panelGrid id="pgMntCategoria" columns="2">
+					<p:outputLabel for="txtCatId" value="#{msj.codigo}" />
+					<h:inputText id="txtCatId"
+						value="#{mntCategoriaCtr.categoria.catId}" required="true"
+						requiredMessage="#{msj.reqCodigo}" />
+
+					<p:outputLabel value="#{msj.categoria}" for="txtCatNombre" />
+					<p:inputText id="txtCatNombre"
+						value="#{mntCategoriaCtr.categoria.catNombre}" required="true"
+						requiredMessage="#{msj.reqCategoria}" />
+
+					<p:outputLabel value="#{msj.estado}" />
+					<p:selectOneMenu value="#{mntCategoriaCtr.categoria.catEstado}">
+						<f:selectItem itemValue="OK" itemLabel="Activo" />
+						<f:selectItem itemValue="ANU" itemLabel="Anulado" />
+					</p:selectOneMenu>
+
+					<f:facet name="footer">
+						<center>
+							<p:commandButton id="btnCrear" value="#{msj.crear}"
+								rendered="#{mntCategoriaCtr.crearNuevo}"
+								action="#{mntCategoriaCtr.crearCategoria}"
+								process="pgMntCategoria"
+								update="tblCategoria pgMntCategoria msjMntCategoria" />
+							<p:commandButton id="btnActualizar" value="#{msj.actualizar}"
+								rendered="#{mntCategoriaCtr.actualizar}"
+								process="pgMntCategoria"
+								action="#{mntCategoriaCtr.actualizarCategoria}"
+								update="tblCategoria pgMntCategoria msjMntCategoria" />
+						</center>
+					</f:facet>
+				</p:panelGrid>
+
+			</p:dialog>
+
+			<p:panel header="#{msj.mantenimientoCategoria}">
+				<div align="left">
+					<p:commandButton id="btnNuevo"
+						onclick="PF('dlgMntCategoria').show()" value="#{msj.nuevo}"
+						icon="ui-icon-plusthick" process="@this"
+						action="#{mntCategoriaCtr.nuevaCategoria}" update="pgMntCategoria" />
+				</div>
+
+				<p:dataTable id="tblCategoria" scrollable="true" scrollHeight="400"
+					value="#{mntCategoriaCtr.categoriaList}" var="categoria"
+					rowIndexVar="it">
+					<f:facet name="header">
+						<h:outputText value="#{msj.registrosEncontrados}" />
+					</f:facet>
+					<p:column headerText="Ln." width="10%" style="text-align:right">
+						<p:outputLabel value="#{it+1}" style="FONT-WEIGHT: bold;" />
+					</p:column>
+					<p:column headerText="#{msj.categoria}" filterMatchMode="contains"
+						filterBy="#{categoria.catId} - #{categoria.catNombre}">
+						<h:outputText value="#{categoria.catId} - #{categoria.catNombre}" />
+					</p:column>
+					<p:column headerText="#{msj.estado}">
+						<h:outputText value="#{categoria.catEstado}" />
+					</p:column>
+					<p:column headerText="#{msj.accion}">
+						<center>
+							<p:commandButton id="btnEditar" process="@this"
+								title="#{msj.actualizar}" icon="ui-icon-pencil"
+								oncomplete="PF('dlgMntCategoria').show()"
+								update=":frmMntCategoria:pgMntCategoria"
+								action="#{mntCategoriaCtr.seleccionarCategoria}">
+								<f:setPropertyActionListener
+									target="#{mntCategoriaCtr.categoria}" value="#{categoria}" />
+							</p:commandButton>
+						</center>
+					</p:column>
+				</p:dataTable>
+
+			</p:panel>
+			<p:growl globalOnly="true" />
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

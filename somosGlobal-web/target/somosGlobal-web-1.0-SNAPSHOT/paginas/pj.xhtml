@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmActor" rendered="#{loginCtr.usuario!=null}">
+			<p:growl autoUpdate="true" />
+			<p:panel header="#{msj.crearConsumidor}">
+				<p:panelGrid id="pGridActor" columns="2">
+					<p:outputLabel value="#{msj.cedRucPas}" for="cedRucPasActTxt" />
+					<p:inputText id="cedRucPasActTxt"
+						value="#{actorCtr.actor.cedrucpasAct}" required="true"
+						requiredMessage="#{msj.reqCedRucPas}" />
+
+					<p:outputLabel value="#{msj.nombres}" for="nombresActTxt" />
+					<p:inputText id="nombresActTxt"
+						value="#{actorCtr.actor.nombresAct}" required="true"
+						requiredMessage="#{msj.reqNombres}" />
+
+					<p:outputLabel value="#{msj.apellidos}" for="apellidosActTxt" />
+					<p:inputText id="apellidosActTxt"
+						value="#{actorCtr.actor.apellidosAct}" required="true"
+						requiredMessage="#{msj.reqApellidos}" />
+
+					<p:outputLabel value="#{msj.fechaNacimiento}" for="fecNacActCal" />
+					<p:calendar id="fecNacActCal" value="#{actorCtr.actor.fecNacAct}"
+						required="true" requiredMessage="#{msj.reqFechaNacimiento}"
+						pattern="#{msj.forFechaCorta}" navigator="true" showOn="button"
+						showOtherMonths="true" showButtonPanel="true" showWeek="true" />
+
+					<p:outputLabel for="sexoAct" value="#{msj.genero}" />
+					<p:selectOneRadio id="sexoAct" value="#{actorCtr.actor.sexoAct}">
+						<f:selectItem itemValue="F" itemLabel="#{msj.femenino}" />
+						<f:selectItem itemValue="M" itemLabel="#{msj.masculino}" />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="#{msj.repLegal}" />
+					<p:inputText value="#{actorCtr.actor.representanteAct}" />
+
+					<p:outputLabel value="#{msj.slogan}" />
+					<p:inputText value="#{actorCtr.actor.sloganAct}" />
+
+					<p:outputLabel value="#{msj.servicio}" />
+					<p:inputText value="#{actorCtr.actor.servicioAct}" />
+
+					<p:outputLabel value="#{msj.ranking}" />
+					<p:rating value="#{actorCtr.actor.rankingAct}" />
+
+					<p:outputLabel value="#{msj.actividadPrincipal}" />
+					<p:inputText value="#{actorCtr.actor.actividadAct}" />
+
+					<p:outputLabel value="#{msj.categoria}" for="somCategoria" />
+					<h:selectOneMenu id="somCategoria" required="true"
+						styleClass="width400px" requiredMessage="#{msj.reqCategoria}"
+						value="#{actorCtr.catIdSeleccionada}">
+						<f:selectItem noSelectionOption="true"
+							itemLabel="#{msj.seleccione}" itemValue="0" />
+						<f:selectItems value="#{actorCtr.categoriaListItem}" />
+					</h:selectOneMenu>
+
+
+
+				</p:panelGrid>
+				<f:facet name="footer">
+					<div align="right">
+						<p:commandButton value="#{msj.crear}" process="@this,pGridActor"
+							action="#{actorCtr.crearActor}" update="pGridActor" />
+						<p:commandButton value="#{msj.nuevo}" process="@this"
+							update="pGridActor" action="#{actorCtr.inicio}" />
+					</div>
+				</f:facet>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
