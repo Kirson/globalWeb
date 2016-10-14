@@ -1,0 +1,208 @@
+@CHARSET "UTF-8";
+
+hr {
+	background-color: orange !important;
+	color: orange !important;
+	display: block;
+	height: 1px;
+	border: 0;
+	border-top: 1px solid #ccc;
+	margin: 1em 0;
+	padding: 0;
+}
+
+.panel-heading h3 {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: normal;
+	width: 75%;
+	padding-top: 8px;
+}
+
+#main-header {
+	height: 40px;
+	width: 100%;
+	left: 0;
+	top: 0;
+}
+
+#main-header a {
+	color: white;
+}
+
+/*
+ * Logo
+ */
+#logo-header {
+	float: left;
+	padding: 15px 0 0 20px;
+	text-decoration: none;
+}
+
+#logo-header:hover {
+	color: #0b76a6;
+}
+
+#logo-header .site-name {
+	display: block;
+	font-weight: 700;
+	font-size: 1.2em;
+}
+
+#logo-header .site-desc {
+	display: block;
+	font-weight: 300;
+	font-size: 0.8em;
+	color: #999;
+}
+
+.pestana {
+	border-bottom-right-radius: 45px;
+	background-color: #046598;
+	width: 50%;
+	color: white;
+	height: 100%;
+}
+
+.eslogan {
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 0.17in;
+}
+
+.ancho100prc {
+	width: 100%;
+}
+
+.ancho50prc {
+	width: 50%;
+}
+
+.width400px {
+	width: 400px;
+}
+
+.width200px {
+	width: 200px;
+}
+
+.servicio {
+	font-family: sans-serif;
+	font-size: 0.15in;
+	margin-top: 0.1in;
+}
+
+.detalle {
+	margin: 20px;
+}
+
+.logoLista {
+	float: left;
+	width: 31%;
+	background-color: white;
+	margin-left: 1.8%;
+	margin-top: 1%;
+	margin-bottom: 2%;
+}
+
+.localDatosLista {
+	height: 75%;
+	float: left;
+	width: 31%;
+	background-color: white;
+	margin-left: 1.5%;
+	margin-top: 1%;
+	margin-bottom: 2%;
+}
+
+.parent {
+	display: table;
+}
+
+.child {
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 20px;
+}
+
+.contentLocales1 {
+	float: left;
+	width: 90%;
+	margin-left: 5%;
+}
+
+.contentLocales2 {
+	float: left;
+	width: 100%;
+}
+
+.contentLocales3 {
+	float: left;
+	width: 100%;
+}
+
+.contentLocales4 {
+	text-align: center;
+	width: 100%;
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+}
+
+.medioNombreLocal {
+	margin-top: 2%;
+	height: 30px;
+	display: inline-block;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.scrollDivVertical {
+	overflow-y: scroll;
+	height: 200px;
+}
+
+input.upper {
+	text-transform: uppercase;
+}
+
+.cabecera {
+	float: left;
+}
+
+.commandLinkButton {
+	background-color: #046598;
+	color: white;
+	padding: 14px 25px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+}
+
+#header {
+	background-image: url('../../imagenes/pie.png');
+	color: white;
+	text-align: center;
+	padding: 5px;
+}
+
+.vcenter {
+	display: inline-block;
+	vertical-align: middle;
+	float: none;
+}
+
+.width100prc {
+	width: 100%;
+}
+
+.red {
+	color: red;
+}
+
+.errorMsg {
+	color: red;
+}

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaAvanzada">
+			<p:panel header="#{msj.busquedaAvanzada}">
+				<p:messages autoUpdate="true" closable="true" />
+				<h:panelGrid id="pGridBusquedaAvanzada">
+					<p:autoComplete id="acSimple"
+						value="#{conLocalVentaAvanzada.ubiPalabrasClave}"
+						completeMethod="#{conLocalVentaAvanzada.completeUbiPalabrasClave}">
+						<p:ajax event="itemSelect"
+							listener="#{conLocalVentaAvanzada.handleSelect}" />
+					</p:autoComplete>
+					<p:watermark for="acSimple" value="#{msj.ubicacion}" id="watermark" />
+					<p:autoComplete id="acSimple2"
+						value="#{conLocalVentaAvanzada.lvPalabrasClave}"
+						completeMethod="#{conLocalVentaAvanzada.completeLvPalabrasClave}">
+					</p:autoComplete>
+					<p:watermark for="acSimple2" value="#{msj.palabrasClave}"
+						id="watermark2" />
+				</h:panelGrid>
+				<f:facet name="footer">
+					<p:commandButton value="#{msj.nuevo}" icon="ui-icon-document"
+						process="@this" action="#{conLocalVentaAvanzada.nuevaBusqueda}"
+						update="pGridBusquedaAvanzada, tblLocalVenta" />
+					<p:commandButton icon="ui-icon-search" value="#{msj.buscar}"
+						process="pGridBusquedaAvanzada @this"
+						action="#{conLocalVentaAvanzada.recuperarLocalVentaList}"
+						update="tblLocalVenta" />
+				</f:facet>
+			</p:panel>
+			<br></br>
+			<p:panel header="#{msj.localesEncontrados}">
+				<p:dataTable value="#{conLocalVentaAvanzada.localVentaList}"
+					id="tblLocalVenta" var="localVenta">
+					<p:column headerText="#{msj.localesTiendas}" width="600">
+						<h:graphicImage width="100px" height="100px"
+							value="/imagenes/#{localVenta.lvLogo}" />
+						<br></br>
+						<p:dataTable value="#{localVenta.ubicacions}" var="ubicacion"
+							scrollable="true" scrollHeight="150">
+							<p:column headerText="#{msj.sector}">
+								#{ubicacion.barrio.barNombre}
+							</p:column>
+							<p:column headerText="#{msj.sucursales}">
+								<h:outputText
+									value="#{ubicacion.ubiCallePrin} #{ubicacion.ubiNumPredio} y #{ubicacion.ubiCalleSec}" />
+							</p:column>
+						</p:dataTable>
+					</p:column>
+					<p:column headerText="#{msj.imagenesPromociones}">
+						<p:contentFlow value="#{localVenta.localPromocionList}"
+							var="image">
+							<h:graphicImage value="/imagenes/#{image.lpImagen}"
+								styleClass="content" />
+						</p:contentFlow>
+					</p:column>
+					<p:column width="150">
+						<p:commandButton value="#{msj.verMas}" process="@this"
+							icon=" ui-icon-plusthick"
+							action="#{conLocalVentaCtr.seleccionarLocalVenta}">
+							<f:setPropertyActionListener
+								target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+						</p:commandButton>
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

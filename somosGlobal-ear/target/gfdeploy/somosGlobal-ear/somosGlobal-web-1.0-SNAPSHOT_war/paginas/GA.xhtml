@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmActor" rendered="#{loginCtr.usuario != null}">
+			<p:growl autoUpdate="true" showDetail="true" />
+			<p:growl />
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{actorCtr.headerActor}</div>
+				<br></br>
+				<div class="panel-body">
+					<h:panelGroup id="pGridActor">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="cedRucPasActTxt" value="#{msj.ruc}" />
+									<p:inputText id="cedRucPasActTxt" style="width: 100%;"
+										value="#{actorCtr.actor.cedrucpasAct}" required="true"
+										requiredMessage="#{msj.reqCedRucPas}" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="razonSocialAct" value="#{msj.razonSocial}" />
+									<p:inputText id="razonSocialAct" style="width: 100%;"
+										value="#{actorCtr.actor.razonSocialAct}" required="true"
+										requiredMessage="#{msj.reqRazonSocial}" />
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="nombreComercialActTxt"
+										value="#{msj.nombreComercial}" />
+									<p:inputText id="nombreComercialActTxt"
+										value="#{actorCtr.actor.nombreComercialAct}" required="true"
+										style="width: 100%;"
+										requiredMessage="#{msj.reqNombreComercial}" maxlength="100" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="actividadActTxt"
+										value="#{msj.actividadPrincipal}" />
+									<p:inputText id="actividadActTxt" style="width: 100%;"
+										value="#{actorCtr.actor.actividadAct}" required="true"
+										requiredMessage="#{msj.reqActividadPrincipal}"
+										validatorMessage="#{msj.valActividadPrincipalLongitud}">
+										<f:validateLength maximum="400" />
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="sloganActTxt" value="#{msj.slogan}" />
+									<p:inputText id="sloganActTxt" style="width: 100%;"
+										value="#{actorCtr.actor.sloganAct}" required="true"
+										requiredMessage="#{msj.reqSlogan}" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="servicioActTxt" value="#{msj.servicio}" />
+									<p:inputText id="servicioActTxt" style="width: 100%;"
+										value="#{actorCtr.actor.servicioAct}" required="true"
+										requiredMessage="#{msj.reqServicio}" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel value="#{msj.calificacion}" />
+									<p:rating value="#{actorCtr.actor.rankingAct}" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="form-group">
+									<p:outputLabel for="catId" value=" #{msj.seleccioneCategoria}" />
+									<h:selectOneMenu id="catId" styleClass="form-control"
+										value="#{actorCtr.catIdSeleccionada}" required="true"
+										requiredMessage="#{msj.reqCategoria}">
+										<f:selectItem noSelectionOption="true" itemDisabled="true"
+											itemLabel="#{msj.seleccione}" />
+										<f:selectItems value="#{actorCtr.categoriaListItem}" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+
+							<div class="col-md-12">
+								<div class="form-group">
+									<p:outputLabel for="txtPalabraClave"
+										value="#{msj.palabraClave} (50 Caracteres)"  />
+									<div class="row">
+										<div class="col-sm-5">
+											<p:inputText id="txtPalabraClave" maxlength="50"
+												validatorMessage="Máximo 50 caracteres"
+												value="#{actorCtr.palabraClave}" style="width: 100%;">
+												<f:validateLength maximum="50" />
+											</p:inputText>
+											<p:commandLink styleClass="btn btn-default btn-block"
+												value="#{msj.agregar}" process="@this txtPalabraClave"
+												update="txtPalabraClave tblPalabrasClave"
+												action="#{actorCtr.agregarPalabraClave}" />
+										</div>
+										<div class="col-sm-7">
+											<p:dataTable id="tblPalabrasClave"
+												value="#{actorCtr.palabraClaveList}" var="palabraClave">
+												<p:column headerText="#{msj.palabraClave}">
+													<h:outputText value="#{palabraClave}" />
+												</p:column>
+												<p:column headerText="#{msj.accion}">
+													<p:commandLink id="cmdEliminarPalabraClave"
+														value="#{msj.eliminar}" process="@this"
+														update=":frmActor:tblPalabrasClave"
+														action="#{actorCtr.quitarPalabraClave}">
+														<f:setPropertyActionListener
+															target="#{actorCtr.palabraClave}" value="#{palabraClave}" />
+													</p:commandLink>
+												</p:column>
+											</p:dataTable>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<h:panelGroup rendered="#{actorCtr.seleccionarPorcentajeRender}">
+								<div class="col-md-12">
+									<div class="form-group">
+										<p:outputLabel for="idArol"
+											value="#{msj.seleccionePorcentajeNivel}" />
+										<h:selectOneMenu id="idArol"
+											value="#{actorCtr.idArolSeleccionado}" required="true"
+											requiredMessage="#{msj.reqPorcentajeNivel}"
+											styleClass="form-control">
+											<f:selectItem noSelectionOption="true" itemDisabled="true"
+												itemLabel="#{msj.seleccione}" />
+											<f:selectItems value="#{actorCtr.actorRolListItem}" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+							</h:panelGroup>
+						</div>
+					</h:panelGroup>
+
+				</div>
+				<div class="panel-footer">
+					<div class="row">
+						<div class="col-md-4">
+							<p:commandLink value="Ver/Agregar Referencias" process="@this"
+								action="agregarContacto" />
+						</div>
+						<div class="col-md-8" align="right">
+							<p:commandLink value="#{msj.nuevo}" process="@this"
+								update="pGridActor" action="#{actorCtr.inicio}" />
+							&nbsp;
+							<p:commandLink value="#{msj.crear}" process="@this,pGridActor"
+								rendered="#{actorCtr.crearActorRender}"
+								styleClass="btn btn-primary" action="#{actorCtr.crearActor}"
+								update="pGridActor" />
+								
+							<p:commandLink value="#{msj.actualizar}"
+								process="@this,pGridActor"
+								rendered="#{actorCtr.actualizarActorRender}"
+								styleClass="btn btn-primary"
+								action="#{actorCtr.actualizarActor}" update="pGridActor" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

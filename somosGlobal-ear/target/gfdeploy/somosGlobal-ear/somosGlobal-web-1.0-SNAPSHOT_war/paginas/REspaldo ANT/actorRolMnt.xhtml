@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+		<h:form id="frmContacto">
+			<p:growl id="messages" autoUpdate="true" showDetail="true" />
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{msj.porcentajeCadenaMnt}</div>
+				<div class="panel-body">
+					#{msj.ingreseNumeroCedRucPas}
+					<div class="row">
+						<div class="col-sm-10">
+							<h:inputText id="cedrucpasActTxt" styleClass="form-control"
+								value="#{actorRolCtr.cedrucpasAct}" required="true"
+								requiredMessage="#{msj.reqCedRucPas}" />
+						</div>
+						<div class="col-sm-2">
+							<p:commandLink value="#{msj.buscar}"
+								styleClass="btn btn-default btn-block"
+								action="#{actorRolCtr.recuperarActorRolList}"
+								process="@this cedrucpasActTxt" update="messages actorRolTbl">
+							</p:commandLink>
+						</div>
+					</div>
+					<br></br>
+					<div class="table-responsive">
+						<h:dataTable id="actorRolTbl" value="#{actorRolCtr.actorRolList}"
+							styleClass="table table-striped" var="actorRol">
+							<h:column>
+								<f:facet name="header">
+								#{msj.actor}
+							</f:facet>
+							#{actorRol.actor.razonSocialAct} #{actorRol.actor.nombresAct} #{actorRol.actor.apellidosAct}
+						</h:column>
+
+							<h:column>
+								<f:facet name="header">
+								#{msj.cedRucPas}
+							</f:facet>
+							#{actorRol.actor.cedrucpasAct}
+						</h:column>
+
+							<h:column>
+								<f:facet name="header">
+								#{msj.porcentaje}
+							</f:facet>
+							#{actorRol.prcArol}
+						</h:column>
+							<h:column>
+								<f:facet name="header">
+								#{msj.accion}
+							</f:facet>
+								<p:commandLink value="#{msj.nuevoPorcentaje}" process="@this"
+									styleClass="btn btn-default btn-block"
+									onclick="PF('dlgNuevoPorcentaje').show()">
+									<f:setPropertyActionListener target="#{actorRolCtr.actorRol}"
+										value="#{actorRol}" />
+								</p:commandLink>
+							</h:column>
+						</h:dataTable>
+					</div>
+				</div>
+			</div>
+			<p:dialog widgetVar="dlgNuevoPorcentaje">
+				#{msj.ingreseNuevoPorcentaje}
+				<h:inputText id="nuevoPrcArolTxt"
+					value="#{actorRolCtr.nuevoPrcArol}" styleClass="form-control" />
+
+				<f:facet name="footer">
+					<div align="right">
+						<p:commandLink value="#{msj.crear}"
+							process="@this nuevoPrcArolTxt" styleClass="btn btn-default"
+							action="#{actorRolCtr.crearActorRol}"
+							update="messages actorRolTbl" />
+					</div>
+				</f:facet>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

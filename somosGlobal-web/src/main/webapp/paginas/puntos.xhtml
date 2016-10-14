@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="titulo">
+		<h:outputText value="Puntos" />
+	</ui:define>
+	<ui:define name="content">
+		<h:form id="frmPuntos" >
+                    <p:fieldset legend="Puntos" toggleable="false" collapsed="false">
+                        <h:panelGrid id="PuntosPanel" columns="3">
+                            <p:outputLabel for="puntos" value="Puntos: " />
+                            <p:selectOneMenu id="puntos" value="#{puntosDemoCtrl.seleccion}">
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems valuepuntosDemoCtrlCtrl.usuarios}" />
+                            </p:selectOneMenu>
+                            
+                            <br/>
+                            <p:outputLabel for="txtCodigoPersona" value="Puntos" />
+                            <p:inputText id="txtCodigoPersona" vpuntosDemoCtrlntosCtrl.puntos}"
+                                        required="true"  />
+               
+                            <br/>
+                            <p:commandButton id="puntosBtn" icon="ui-icon-search"
+                                        value="OkpuntosDemoCtrl#{puntosCtrl.anadirPuntos}"
+                                         />
+                        </h:panelGrid>
+                    </p:fieldset>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

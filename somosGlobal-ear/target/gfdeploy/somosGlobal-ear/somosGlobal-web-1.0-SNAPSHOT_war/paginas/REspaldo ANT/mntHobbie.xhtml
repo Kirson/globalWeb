@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="content">
+	
+			<h:form id="frmMntHobbie" rendered="#{loginCtr.usuario!=null}">
+				<p:dialog modal="true" widgetVar="dlgMntHobbie"
+					header="#{msj.mantenimientoHobbie}">
+					<h:panelGrid id="pgMntHobbie" columns="1">
+						<p:outputLabel value="#{msj.codigo}" />
+						<h:outputText id="txtId" value="#{ctrMntHobbie.hobbie.hobId}" />
+
+						<p:outputLabel value="#{msj.hobbie}" />
+						<p:inputText id="txtHobNombre"
+							value="#{ctrMntHobbie.hobbie.hobNombre}" required="true"
+							requiredMessage="#{msj.reqHobbie}" />
+
+						<p:outputLabel value="#{msj.estado}" />
+						<p:selectOneMenu value="#{ctrMntHobbie.hobbie.hobEstado}">
+							<f:selectItem itemValue="OK" itemLabel="Activo" />
+							<f:selectItem itemValue="ANU" itemLabel="Anulado" />
+						</p:selectOneMenu>
+
+						<f:facet name="footer">
+							<center>
+								<p:commandButton id="btnGuardar" value="#{msj.crear}"
+									rendered="#{ctrMntHobbie.crearNuevo}"
+									action="#{ctrMntHobbie.crearHobbie}" process="pgMntHobbie"
+									update="tblHobbie pgMntHobbie" />
+								<p:commandButton id="btnActualizar" value="#{msj.actualizar}"
+									rendered="#{ctrMntHobbie.actualizar}" process="pgMntHobbie"
+									action="#{ctrMntHobbie.actualizarHobbie}"
+									update="tblHobbie pgMntHobbie mensajesHobbie" />
+							</center>
+						</f:facet>
+					</h:panelGrid>
+					<p:messages id="mensajesHobbie" />
+				</p:dialog>
+
+				<p:panel header="#{msj.mantenimientoHobbie}">
+					<div align="left">
+						<p:commandButton id="btnNuevo" onclick="PF('dlgMntHobbie').show()"
+							value="#{msj.nuevo}" icon="ui-icon-plusthick" process="@this"
+							action="#{ctrMntHobbie.nuevoHobbie}" update="pgMntHobbie" />
+					</div>
+					<p:dataTable id="tblHobbie" value="#{ctrMntHobbie.hobbieList}"
+						var="hobbie">
+						<f:facet name="header">
+							<h:outputText value="#{msj.registrosEncontrados}" />
+						</f:facet>
+						<p:column headerText="#{msj.codigo}">
+							<h:outputText value="#{hobbie.hobId}" />
+						</p:column>
+						<p:column headerText="#{msj.hobbie}">
+							<h:outputText value="#{hobbie.hobNombre}" />
+						</p:column>
+						<p:column headerText="#{msj.estado}">
+							<h:outputText value="#{hobbie.hobEstado}" />
+						</p:column>
+						<p:column headerText="#{msj.accion}">
+							<center>
+								<p:commandButton id="btnEditar" process="@this"
+									title="#{msj.actualizar}" icon="ui-icon-pencil"
+									oncomplete="PF('dlgMntHobbie').show()"
+									update=":frmMntHobbie:pgMntHobbie"
+									action="#{ctrMntHobbie.seleccionarHobbie}">
+									<f:setPropertyActionListener target="#{ctrMntHobbie.hobbie}"
+										value="#{hobbie}" />
+								</p:commandButton>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+				<p:growl autoUpdate="true" globalOnly="true" />
+			</h:form>
+		
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="contenido">
+		
+		<br />
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h1>#{actorLocalCtrl.localActor.razonSocialAct}</h1>
+				<div align="right">
+					<p:commandLink process="@this"
+						action="conLocalImagenes">
+						<h:graphicImage value="/imagenes/bt_vermas.png" />
+					</p:commandLink>
+					<p:commandLink process="@this"
+						action="conLocalPromociones">
+						<h:graphicImage value="/imagenes/bt_promocion.png" />
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="panel panel-success">
+							<div class="panel-heading">Ubicación de Locales</div>
+							<div class="panel-body">
+								<h:form>
+									<p:gmap id="gmap" widgetVar="pmap"
+										center="#{actorLocalCtrl.centerMap}" type="ROADMAP"
+										style="width:100%;height:600px" zoom="18"
+										model="#{actorLocalCtrl.model}" streetView="true">
+										<p:ajax event="overlaySelect"
+											listener="#{actorLocalCtrl.onMarkerSelect}" />
+										<p:gmapInfoWindow id="infoWindow">
+											<h:graphicImage width="#{msj.logoAnchoPx}"
+												styleClass="img-rounded" height="#{msj.logoAltoPx}"
+												value="/imagenes/#{actorLocalCtrl.localActor.logoAct}" />
+											<br></br>
+											<h:outputText
+												value="#{actorLocalCtrl.localActor.razonSocialAct}" />
+											<br />
+											<h:outputLink value="#{actorLocalCtrl.ubiFrameMapa}"
+												target="_blank">#{msj.comoLlegar}</h:outputLink>
+											<br />
+											<h:outputLink value="#{actorLocalCtrl.ubiFrameSv}"
+												target="_blank">
+												#{msj.verEstablecimiento}
+											</h:outputLink>
+										</p:gmapInfoWindow>
+									</p:gmap>
+								</h:form>
+							</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading">#{msj.telefonosContacto}</div>
+							<div class="panel-body">
+								<h:dataTable value="#{actorLocalCtrl.localActor.telefonosActor}"
+									styleClass="table table-striped" var="telefono">
+									<h:column>
+										<f:facet name="header">#{msj.numero}</f:facet>
+										<h:outputText value="#{telefono.val1Ar}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.tipo}</f:facet>
+										<h:outputText value="#{telefono.catalogoGen.nombreCg}" />
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6">
+						<div class="panel panel-success">
+							<div class="panel-heading">#{msj.nuestroNegocio}</div>
+							<div class="panel-body">
+								<div class="detalle">
+									<p>
+										<span class="eslogan"><h:outputText
+												value="#{actorLocalCtrl.localActor.sloganAct}" /> </span>
+									</p>
+									<span class="servicio"> <h:outputText
+											value="#{actorLocalCtrl.localActor.servicioAct}" />
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel panel-success">
+							<div class="panel-heading">#{msj.horariosAtencion}</div>
+							<div class="panel-body">
+								<h:dataTable value="#{actorLocalCtrl.localActor.horariosActor}"
+									styleClass="table table-striped" var="horario">
+									<h:column>
+										<f:facet name="header">#{msj.dia}</f:facet>
+										<h:outputText value="#{horario.catalogoGen.nombreCg}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.desde}</f:facet>
+										<h:outputText value="#{horario.val1Ar}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.hasta}</f:facet>
+										<h:outputText value="#{horario.val2Ar}" />
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+
+						<div class="panel panel-success">
+							<div class="panel-heading">#{msj.direccion}</div>
+							<div class="panel-body">
+								<h:dataTable
+									value="#{actorLocalCtrl.localActor.direccionesActor}"
+									styleClass="table table-striped" var="direccion">
+									<h:column>
+										<f:facet name="header">#{msj.sector}</f:facet>
+										<h:outputText value="#{direccion.localidad.locNombre}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.direccion}</f:facet>
+										<p class="text-capitalize list-group-item-text">
+											<h:outputText
+												value="#{direccion.val2Ar} #{direccion.val4ar} y #{direccion.val3Ar}" />
+										</p>
+									</h:column>
+								</h:dataTable>
+							</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading">Contactos Digitales</div>
+							<div class="panel-body">
+								<ul>
+									<ui:repeat
+										value="#{actorLocalCtrl.localActor.contactosDigitalesActor}"
+										var="cd">
+
+										<a href="#{cd.val1Ar}"> <h:graphicImage
+												value="/imagenes/#{cd.catalogoGen.refCg}"></h:graphicImage>
+										</a>
+
+									</ui:repeat>
+								</ul>
+							</div>
+						</div>
+						<p:commandLink>
+							<a href="#{conLocalVentaCtr.localVenta.lvvideo}" target="_blank"> <h:graphicImage
+									value="/imagenes/bt_video.png"
+									rendered="#{conLocalVentaCtr.localVenta.lvvideo != NULL}"
+									target="_blank"
+									/></a>
+						</p:commandLink>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

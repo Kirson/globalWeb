@@ -16,6 +16,7 @@ import com.cashback.model.Persona;
 import com.cashback.model.PuntosConsumidor;
 import com.cashback.model.TransaccionesConsumidor;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -50,7 +51,21 @@ public class PuntosCtr extends Controladores {
     
     @EJB
     ILocalVenta localEJB;
+    
+    @PostConstruct
+    public void inicio() {
+	buildInfo();
+     }
 
+    /**
+     * recuperar informacion
+     * inicial
+     */
+    private void buildInfo(){
+    
+    }
+    
+    
     public LocalVenta getLocalVenta() {
         return localVenta;
     }

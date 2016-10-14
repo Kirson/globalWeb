@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="../templates/plantilla.xhtml">
+	<ui:define name="fidelizacion">
+		<h:form id="frmCambiarClave">
+			<p:growl autoUpdate="update" showDetail="true" />
+			<div class="panel panel-default">
+				<div class="panel-heading">#{msj.cambiarClave}</div>
+				<div class="panel-body">
+					<h:panelGroup id="pGroupCambiarClave">
+						<h:outputText value="#{msj.ingresaClaveNueva}" />
+						<h:inputSecret id="usrPasswordNuevoTxt" styleClass="form-control"
+							value="#{loginCtr.usrPasswordNuevo}" required="true"
+							requiredMessage="#{msj.reqClave}"
+							validatorMessage="#{msj.minimo6Caracteres}">
+							<f:validateLength minimum="6" />
+						</h:inputSecret>
+						<h:message for="usrPasswordNuevoTxt" errorClass="errorMsg" />
+						<br></br>
+
+						<h:outputText value="#{msj.repiteNuevaClave}" />
+						<h:inputSecret id="usrPasswordNuevo2Txt" styleClass="form-control"
+							value="#{loginCtr.usrPasswordNuevo2}" required="true"
+							requiredMessage="#{msj.reqRepiteClave}" />
+						<h:message for="usrPasswordNuevo2Txt" errorClass="red" />
+					</h:panelGroup>
+				</div>
+
+				<div class="panel-footer" align="right">
+					<p:commandLink value="#{msj.limpiar}" process="@this"
+						update="pGroupCambiarClave" />
+					<h:outputText value="   " />
+					<p:commandLink value="#{msj.cambiarClave}"
+						action="#{loginCtr.cambiarClave}" update="pGroupCambiarClave"
+						process="pGroupCambiarClave, @this" styleClass="btn btn-primary" />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

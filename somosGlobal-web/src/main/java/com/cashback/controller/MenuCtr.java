@@ -117,6 +117,22 @@ public class MenuCtr {
 		item10.setRendered(sMenuPerfil.recuperarMenu(usuario.getPerfil(),
 				men10) != null);
 		consultasSubmenu.addElement(item10);
+                
+                Menu men11 = sMenu.recuperarMenu("CONSULTAS:PUNTOS");
+		DefaultMenuItem item11 = new DefaultMenuItem("Actor");
+		item11.setUrl(men10.getMenUrl());
+		item11.setIcon("ui-icon-person");
+		item11.setRendered(sMenuPerfil.recuperarMenu(usuario.getPerfil(),
+				men11) != null);
+		consultasSubmenu.addElement(item11);
+                
+                Menu men12 = sMenu.recuperarMenu("CONSULTAS:PUNTOSDEMO");
+		DefaultMenuItem item12 = new DefaultMenuItem("Actor");
+		item12.setUrl(men10.getMenUrl());
+		item12.setIcon("ui-icon-person");
+		item12.setRendered(sMenuPerfil.recuperarMenu(usuario.getPerfil(),
+				men12) != null);
+		consultasSubmenu.addElement(item12);
 		
 		menuModel.addElement(firstSubmenu);
 		menuModel.addElement(consultasSubmenu);

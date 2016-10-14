@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/templates/loginTemplate.xhtml">
+	<ui:define name="credenciales">
+		<h:form id="frmLogin">
+			<p:messages autoUpdate="true" showDetail="true" />
+			<div class="panel panel-primary">
+				<div class="panel-heading">#{msj.ingreseCredenciales}</div>
+				<div class="panel-body">
+					<h:panelGroup id="pGridAcceso">
+								#{msj.ingreseUsuario}
+								<h:inputText id="txtUsrNombre" value="#{loginCtr.usrNombre}"
+							styleClass="form-control has-error" required="true"
+							requiredMessage="#{msj.reqUsuario}" />
+
+						<br></br>
+								#{msj.ingreseContrasena}
+								<h:inputSecret id="txtUsrPassword" styleClass="form-control"
+							value="#{loginCtr.usrPassword}" required="true"
+							requiredMessage="#{msj.reqPassword}" />
+					</h:panelGroup>
+
+				</div>
+				<div class="panel-footer" align="right">
+					<p:commandLink id="cmdAcceder" value="#{msj.aceptar}"
+						styleClass="btn btn-primary" action="#{loginCtr.acceder}"
+						process="pGridAcceso @this" update="pGridAcceso" />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

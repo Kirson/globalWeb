@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/plantillaConsulta.xhtml">
+	<ui:define name="categoria">
+		<h:graphicImage	value="/imagenes/#{conLocalVentaCategoria04.categoria.catImagen}" />
+	</ui:define>
+	<ui:define name="filtro">
+		<h:form>
+			<p:growl autoUpdate="true"></p:growl>
+			<h:panelGrid id="pGridBusquedaAvanzada" columns="4">
+				<p:autoComplete id="acSimple2"
+					value="#{conLocalVentaCategoria04.lvPalabrasClave}"
+					completeMethod="#{conLocalVentaAvanzada.completeLvPalabrasClave}">
+				</p:autoComplete>
+				<p:watermark for="acSimple2" value="#{msj.palabraClave}"
+					id="watermark2" />
+				<p:commandButton icon="ui-icon-search" title="#{msj.buscar}"
+					process="pGridBusquedaAvanzada @this"
+					action="#{conLocalVentaCategoria04.recuperarLocalVentaList3}"
+					update=":frmconLocalVentaCategoria04:pGroupLocalVentaList" />
+				<h:selectOneMenu styleClass="form-control"
+					value="#{conLocalVentaCategoria04.catIdSeleccionada}">
+					<f:selectItem itemLabel="Seleccione Categoria" itemValue="01"
+						noSelectionOption="true" />
+					<f:selectItems
+						value="#{conLocalVentaCategoria04.categoriaListItem}" />
+					<f:ajax event="change"
+						listener="#{conLocalVentaCategoria04.recuperarLocalVentaList}"
+						execute="@this" render="@all" />
+				</h:selectOneMenu>
+			</h:panelGrid>
+
+		</h:form>
+	</ui:define>
+
+	<ui:define name="contenido">
+		<h:form id="frmconLocalVentaCategoria04">
+			<h:panelGroup id="pGroupLocalVentaList">
+				<ui:repeat var="localVenta"
+					value="#{conLocalVentaCategoria04.localVentaList}">
+					<br />
+					<div class="row">
+						<div class="col-sm-4">
+							<h:graphicImage width="360px" height="240px"
+								styleClass="img-rounded" value="/imagenes/#{localVenta.lvFoto}" />
+						</div>
+						<div class="col-sm-6">
+							
+							<div class="panel-heading"><h2>#{localVenta.lvNombreCom}</h2></div>
+							<div class="panel-body">									
+								<h:dataTable value="#{localVenta.ubicacions}"
+									styleClass="table table-striped" var="ubicacion">
+									<h:column >
+										<p:commandLink process="@this" 
+											action="#{conLocalVentaCtr.verLocalVenta}">
+											<h:graphicImage value="/imagenes/bt_I.png"/>
+											<f:setPropertyActionListener
+												target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+										</p:commandLink>
+										<p:commandLink process="@this"
+											action="#{conLocalVentaCtr.seleccionarLocalVenta}">
+											<h:graphicImage value="/imagenes/bt_p.png"/>
+											<f:setPropertyActionListener
+												target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+										</p:commandLink>
+									</h:column>
+									<h:column >
+										 <f:facet name="header">#{msj.sector}</f:facet>
+										#{ubicacion.barrio.barNombre}
+									</h:column>
+									<h:column>
+										 <f:facet name="header">#{msj.ubicacion}</f:facet>
+										 <p class="text-capitalize list-group-item-text">#{ubicacion.ubiCallePrin}
+										 #{ubicacion.ubiNumPredio} y #{ubicacion.ubiCalleSec}</p>
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.lunVie}</f:facet>
+										<h:outputText
+											value="#{ubicacion.ubiLunVieAbre} - #{ubicacion.ubiLunVieCierra}" />
+									</h:column>
+									<h:column>
+										<f:facet name="header">#{msj.sabDomFer}</f:facet>
+										<h:outputText
+											value="#{ubicacion.ubiSdfAbre} - #{ubicacion.ubiSdfCierra}" />
+									</h:column>
+									<h:column>
+										<p:commandLink process="@this" styleClass="pull-leght"
+											action="#{conLocalVentaCtr.verLocalImagenes}">
+											<h:graphicImage value="/imagenes/bt_v.png"/>
+											<f:setPropertyActionListener
+												target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+										</p:commandLink>
+									</h:column>
+								</h:dataTable>
+							</div>
+
+							<div align="center">
+								<p:commandLink process="@this" 
+									action="#{conLocalVentaCtr.verLocalVenta}">
+									<h:graphicImage value="/imagenes/bt_infoygeo.png"/>
+									<f:setPropertyActionListener
+										target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+								</p:commandLink>
+								<p:commandLink process="@this"
+									action="#{conLocalVentaCtr.seleccionarLocalVenta}">
+									<h:graphicImage value="/imagenes/bt_promocion.png"/>
+									<f:setPropertyActionListener
+										target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+								</p:commandLink>
+								<p:commandLink process="@this" 
+									action="#{conLocalVentaCtr.verLocalImagenes}">
+									<h:graphicImage value="/imagenes/bt_vermas.png"/>
+									<f:setPropertyActionListener
+										target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" />
+								</p:commandLink>
+								
+							</div>
+
+						</div>
+						
+						<div class="col-sm-2" align="right">
+							<h:graphicImage width="200px" height="200px"
+								styleClass="img-rounded" value="/imagenes/#{localVenta.lvLogo}" />
+						</div>
+					</div>
+					<br />
+					<div style="background-color: orange; height: 5px;">
+						<br />
+					</div>
+				</ui:repeat>
+			</h:panelGroup>
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
+
+
+<!-- <div class="panel-heading"> -->
+<!-- 	<h3 class="panel-title pull-left">#{conLocalVentaCategoria01.categoria.catNombre} -->
+<!-- 	</h3> -->
+<!-- 	<p:commandLink value="#{msj.todasCategorias}" process="@this" -->
+<!-- 		styleClass="btn btn-default pull-right" type="button" -->
+<!-- 		action="#{conLocalVentaCategoria01.recuperarLocalVentaList2}" -->
+<!-- 		update="pGroupLocalVentaList" /> -->
+<!-- 	<div class="clearfix"></div> -->
+<!-- </div> -->
+
+
+<!-- 	<h3 class="panel-title pull-left">#{localVenta.lvNombreCom} -->
+<!-- 							</h3> -->
+<!-- 							<p:commandLink value="#{msj.verMas}" process="@this" -->
+<!-- 								styleClass="btn btn-default pull-right" type="button" -->
+<!-- 								action="#{conLocalVentaCtr.seleccionarLocalVenta}"> -->
+<!-- 								<f:setPropertyActionListener -->
+<!-- 									target="#{conLocalVentaCtr.localVenta}" value="#{localVenta}" /> -->
+<!-- 							</p:commandLink> -->
+<!-- 							<div class="clearfix"></div> -->
